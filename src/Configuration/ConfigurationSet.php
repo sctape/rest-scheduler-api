@@ -15,7 +15,8 @@ class ConfigurationSet extends \Spark\Configuration\ConfigurationSet
             DefaultConfigurationSet::class,
             DoctrineConfiguration::class,
             DoctrineRepositoryConfiguration::class,
-            AliasConfiguration::class
+            AliasConfiguration::class,
+            AuthConfiguration::class,
         ]);
     }
 }

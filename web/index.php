@@ -11,7 +11,7 @@ $configuration->apply($injector);
 // Configure middleware
 $injector->alias(
     '\\Spark\\Middleware\\Collection',
-    '\\Spark\\Middleware\\DefaultCollection'
+    '\\Scheduler\\Middleware\\MiddlewareCollection'
 );
 
 // Configure the router

@@ -5,7 +5,8 @@
     "license": "MIT",
     "require": {
         "sparkphp/spark": "dev-master",
-        "doctrine/orm": "^2.5"
+        "doctrine/orm": "^2.5",
+        "sparkphp/auth": "^0.2.1"
     },
     "autoload": {
         "psr-4": {

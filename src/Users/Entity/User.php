@@ -45,6 +45,12 @@ class User implements UserInterface
     protected $phone;
 
     /**
+     * @var string
+     * @Column(type="string")
+     */
+    protected $token;
+
+    /**
      * @var \DateTime
      * @Column(type="datetime")
      */

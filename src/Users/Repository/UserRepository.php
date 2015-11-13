@@ -11,11 +11,20 @@ use Scheduler\Users\Contracts\User;
 class UserRepository extends EntityRepository
 {
     /**
-     * @param $id
+     * @param int $id
      * @return User
      */
     public function getOneById($id)
     {
         return $this->find($id);
+    }
+
+    /**
+     * @param string $token
+     * @return User
+     */
+    public function getOneByToken($token)
+    {
+        return $this->findOneByToken($token);
     }
 }
