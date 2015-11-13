@@ -14,6 +14,8 @@ class ConfigurationSet extends \Spark\Configuration\ConfigurationSet
         parent::__construct([
             DefaultConfigurationSet::class,
             DoctrineConfiguration::class,
+            DoctrineRepositoryConfiguration::class,
+            AliasConfiguration::class
         ]);
     }
 }

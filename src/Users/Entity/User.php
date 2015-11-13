@@ -1,14 +1,16 @@
 <?php namespace Scheduler\Users\Entity;
 
+use Scheduler\Users\Contracts\User as UserInterface;
+
 /**
  * Class User
  * @package Scheduler\Users\Entity
  * @author Sam Tape <sctape@gmail.com>
  *
- * @Entity()
+ * @Entity(repositoryClass="Scheduler\Users\Repository\UserRepository")
  * @Table(name="users")
  */
-class User
+class User implements UserInterface
 {
     /**
      * @var int

@@ -1,7 +1,6 @@
 <?php namespace Scheduler\Users\Domain;
 
-use Doctrine\ORM\EntityManager;
-use Scheduler\Users\Entity\User;
+use Scheduler\Users\Repository\UserRepository;
 use Spark\Adr\DomainInterface;
 use Spark\Adr\PayloadInterface;
 
@@ -18,18 +17,18 @@ class GetUsers implements DomainInterface
     private $payload;
 
     /**
-     * @var EntityManager
+     * @var UserRepository
      */
-    private $entityManager;
+    private $userRepository;
 
     /**
      * @param PayloadInterface $payload
-     * @param EntityManager $entityManager
+     * @param UserRepository $userRepository
      */
-    public function __construct(PayloadInterface $payload, EntityManager $entityManager)
+    public function __construct(PayloadInterface $payload, UserRepository $userRepository)
     {
         $this->payload = $payload;
-        $this->entityManager = $entityManager;
+        $this->userRepository = $userRepository;
     }
 
     /**
@@ -40,11 +39,10 @@ class GetUsers implements DomainInterface
      */
     public function __invoke(array $input)
     {
-        /** @var User $user */
-        $user = $this->entityManager->find(User::class, $input['id']);
+        $user = $this->userRepository->getOneById($input['id']);
 
         return $this->payload
             ->withStatus(PayloadInterface::OK)
-            ->withOutput($user->toArray());
+            ->withOutput(['name' => $user->getName()]);
     }
 }

@@ -1,13 +1,6 @@
-<?php
-/**
- * Created by PhpStorm.
- * User: stape
- * Date: 11/12/15
- * Time: 1:44 PM
- */
+<?php namespace Scheduler\Shifts\Entity;
 
-namespace Scheduler\Shifts\Entity;
-
+use Scheduler\Shifts\Contracts\Shift as ShiftInterface;
 use Scheduler\Users\Entity\User;
 
 /**
@@ -18,7 +11,7 @@ use Scheduler\Users\Entity\User;
  * @Entity()
  * @Table(name="shifts")
  */
-class Shift
+class Shift implements ShiftInterface
 {
     /**
      * @var int

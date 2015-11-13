@@ -3,13 +3,14 @@
 use Auryn\Injector;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Tools\Setup;
+use Spark\Configuration\ConfigurationInterface;
 
 /**
  * Class DoctrineConfiguration
  * @package Scheduler\Configuration
  * @author Sam Tape <sctape@gmail.com>
  */
-class DoctrineConfiguration implements \Spark\Configuration\ConfigurationInterface
+class DoctrineConfiguration implements ConfigurationInterface
 {
     /**
      * Applies a configuration set to a dependency injector.
@@ -19,8 +20,10 @@ class DoctrineConfiguration implements \Spark\Configuration\ConfigurationInterfa
     public function apply(Injector $injector)
     {
         $injector->delegate(EntityManager::class, function() {
-            $paths = array("src/Users/Entity/");
-            $paths = array("src/Shifts/Entity/");
+            $paths = [
+                "src/Users/Entity/",
+                "src/Shifts/Entity/"
+            ];
             $isDevMode = true;
 
             // the connection configuration
