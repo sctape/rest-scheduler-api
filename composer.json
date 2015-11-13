@@ -4,11 +4,12 @@
     "type": "project",
     "license": "MIT",
     "require": {
-        "sparkphp/spark": "^0.7"
+        "sparkphp/spark": "dev-master",
+        "doctrine/orm": "^2.5"
     },
     "autoload": {
         "psr-4": {
-            "Spark\\Project\\": "src/"
+            "Scheduler\\": "src/"
         }
     },
     "authors": [
