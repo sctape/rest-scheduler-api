@@ -1,6 +1,9 @@
 <?php namespace Scheduler\Users\Domain;
 
+use League\Fractal\Manager;
+use League\Fractal\Resource\Item;
 use Scheduler\Users\Repository\UserRepository;
+use Scheduler\Users\Transformer\UserTransformer;
 use Spark\Adr\DomainInterface;
 use Spark\Adr\PayloadInterface;
 
@@ -22,13 +25,27 @@ class GetUsers implements DomainInterface
     private $userRepository;
 
     /**
+     * @var UserTransformer
+     */
+    private $userTransformer;
+
+    /**
+     * @var Manager
+     */
+    private $fractal;
+
+    /**
      * @param PayloadInterface $payload
      * @param UserRepository $userRepository
+     * @param UserTransformer $userTransformer
+     * @param Manager $fractal
      */
-    public function __construct(PayloadInterface $payload, UserRepository $userRepository)
+    public function __construct(PayloadInterface $payload, UserRepository $userRepository, UserTransformer $userTransformer, Manager $fractal)
     {
         $this->payload = $payload;
         $this->userRepository = $userRepository;
+        $this->userTransformer = $userTransformer;
+        $this->fractal = $fractal;
     }
 
     /**
@@ -40,9 +57,10 @@ class GetUsers implements DomainInterface
     public function __invoke(array $input)
     {
         $user = $this->userRepository->getOneById($input['id']);
+        $resource = new Item($user, $this->userTransformer);
 
         return $this->payload
             ->withStatus(PayloadInterface::OK)
-            ->withOutput(['name' => $user->getName()]);
+            ->withOutput($this->fractal->createData($resource)->toArray());
     }
 }
