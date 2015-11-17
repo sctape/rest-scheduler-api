@@ -8,7 +8,7 @@ use Scheduler\Users\Entity\User;
  * @package Scheduler\Shifts\Entity
  * @author Sam Tape <sctape@gmail.com>
  *
- * @Entity()
+ * @Entity(repositoryClass="Scheduler\Shifts\Repository\ShiftRepository")
  * @Table(name="shifts")
  */
 class Shift implements ShiftInterface

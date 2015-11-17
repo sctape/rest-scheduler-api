@@ -2,6 +2,8 @@
 
 use Auryn\Injector;
 use Doctrine\ORM\EntityManager;
+use Scheduler\Shifts\Entity\Shift;
+use Scheduler\Shifts\Repository\ShiftRepository;
 use Scheduler\Users\Entity\User;
 use Scheduler\Users\Repository\UserRepository;
 use Spark\Configuration\ConfigurationInterface;
@@ -14,7 +16,8 @@ use Spark\Configuration\ConfigurationInterface;
 class DoctrineRepositoryConfiguration implements ConfigurationInterface
 {
     protected static $entityRepositoryMap = [
-        User::class => UserRepository::class
+        User::class => UserRepository::class,
+        Shift::class => ShiftRepository::class
     ];
 
     /**

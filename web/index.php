@@ -18,8 +18,11 @@ $injector->alias(
 $injector->prepare(
     '\\Spark\\Router',
     function(\Spark\Router $router) {
-        $router->get('/users[/{id}]', 'Scheduler\Users\Domain\GetUsers');
-        $router->post('/users[/{id}]', 'Scheduler\Users\Domain\GetUsers');
+        $router->get('/users/{id}', 'Scheduler\Users\Domain\GetUsers');
+        $router->post('/users/{id}', 'Scheduler\Users\Domain\GetUsers');
+
+        $router->get('/users/{id}/shifts', 'Scheduler\Users\Domain\GetUserShifts');
+        $router->post('/users/{id}/shifts', 'Scheduler\Users\Domain\GetUserShifts');
     }
 );
 

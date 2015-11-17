@@ -14,7 +14,7 @@ class UserTransformer extends TransformerAbstract
      * @param User $user
      * @return array
      */
-    public function transform(User $user)
+    public function transform($user)
     {
         return [
             'id'      => (int) $user->getId(),
@@ -25,7 +25,7 @@ class UserTransformer extends TransformerAbstract
             'links'   => [
                 [
                     'rel' => 'self',
-                    'uri' => '/books/'.$user->getId(),
+                    'uri' => '/users/'.$user->getId(),
                 ]
             ],
         ];

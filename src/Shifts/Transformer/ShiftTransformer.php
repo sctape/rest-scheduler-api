@@ -13,6 +13,16 @@ use Scheduler\Users\Transformer\UserTransformer;
 class ShiftTransformer extends TransformerAbstract
 {
     /**
+     * List of resources to automatically include
+     *
+     * @var array
+     */
+    protected $defaultIncludes = [
+        'employee',
+        'manager'
+    ];
+
+    /**
      * @param Shift $shift
      * @return array
      */
@@ -32,5 +42,31 @@ class ShiftTransformer extends TransformerAbstract
                 ]
             ],
         ];
+    }
+
+    /**
+     * Include Employee
+     *
+     * @param Shift $shift
+     * @return \League\Fractal\Resource\Item
+     */
+    public function includeEmployee(Shift $shift)
+    {
+        $employee = $shift->getEmployee();
+
+        return $this->item($employee, new UserTransformer);
+    }
+
+    /**
+     * Include Manager
+     *
+     * @param Shift $shift
+     * @return \League\Fractal\Resource\Item
+     */
+    public function includeManager(Shift $shift)
+    {
+        $manager = $shift->getManager();
+
+        return $this->item($manager, new UserTransformer);
     }
 }
