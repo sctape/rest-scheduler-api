@@ -11,6 +11,8 @@ use League\Tactician\Handler\MethodNameInflector\HandleInflector;
 use League\Tactician\Plugins\LockingMiddleware;
 use Scheduler\Shifts\Commands\CreateShift;
 use Scheduler\Shifts\Commands\CreateShiftHandler;
+use Scheduler\Shifts\Commands\UpdateShift;
+use Scheduler\Shifts\Commands\UpdateShiftHandler;
 use Spark\Configuration\ConfigurationInterface;
 
 /**
@@ -24,7 +26,8 @@ class TacticianConfiguration implements ConfigurationInterface
      * @var array mapping of commands to their corresponding handlers
      */
     protected static $commandHandlerMapping = [
-        CreateShift::class => CreateShiftHandler::class
+        CreateShift::class => CreateShiftHandler::class,
+        UpdateShift::class => UpdateShiftHandler::class
     ];
 
     /**

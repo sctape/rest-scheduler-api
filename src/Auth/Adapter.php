@@ -55,9 +55,7 @@ class Adapter implements AdapterInterface
     public function validateToken($token)
     {
         if ($user = $this->userRepository->getOneByToken($token)) {
-            $validatedToken = new Token($token, ['id' => $user->getId(), 'entity' => $user]);
-            $this->injector->share($validatedToken);
-            return $validatedToken;
+            return new Token($token, ['id' => $user->getId(), 'entity' => $user]);
         }
 
         throw new InvalidException;

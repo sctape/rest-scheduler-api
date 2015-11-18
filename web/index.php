@@ -19,13 +19,9 @@ $injector->prepare(
     '\\Spark\\Router',
     function(\Spark\Router $router) {
         $router->get('/users/{id}', 'Scheduler\Users\Domain\GetUsers');
-        $router->post('/users/{id}', 'Scheduler\Users\Domain\GetUsers');
-
         $router->get('/users/{id}/shifts', 'Scheduler\Users\Domain\GetUserShifts');
-        $router->post('/users/{id}/shifts', 'Scheduler\Users\Domain\GetUserShifts');
-
-        $router->get('/shifts/create', 'Scheduler\Shifts\Domain\StoreShift');
         $router->post('/shifts/create', 'Scheduler\Shifts\Domain\StoreShift');
+        $router->put('/shifts/{id}', 'Scheduler\Shifts\Domain\UpdateShift');
     }
 );
 

@@ -51,7 +51,7 @@ interface Shift
     public function getStartTime();
 
     /**
-     * @param DateTime $start_time
+     * @param DateTime|string $start_time
      */
     public function setStartTime($start_time);
 
@@ -61,7 +61,7 @@ interface Shift
     public function getEndTime();
 
     /**
-     * @param DateTime $end_time
+     * @param DateTime|string $end_time
      */
     public function setEndTime($end_time);
 

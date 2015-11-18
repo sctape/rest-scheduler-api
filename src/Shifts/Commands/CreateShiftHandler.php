@@ -1,4 +1,5 @@
 <?php namespace Scheduler\Shifts\Commands;
+
 use Scheduler\Shifts\Contracts\Shift;
 use Scheduler\Shifts\Repository\ShiftRepository;
 use Scheduler\Users\Repository\UserRepository;
@@ -50,5 +51,4 @@ class CreateShiftHandler
 
         return $this->shift;
     }
-
 }

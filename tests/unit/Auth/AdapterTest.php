@@ -36,7 +36,6 @@ class AdapterTest extends Test
         $userRepository->shouldReceive('getOneByToken')->once()->with($token)->andReturn($user);
 
         $injector = mockery::mock(Injector::class);
-        $injector->shouldReceive('share')->once()->andReturnNull();
 
         $adapter = new Adapter($userRepository, $injector);
 
@@ -57,7 +56,6 @@ class AdapterTest extends Test
         $userRepository->shouldReceive('getOneByToken')->once()->with($token)->andReturnNull();
 
         $injector = mockery::mock(Injector::class);
-        $injector->shouldReceive('share')->once()->andReturnNull();
 
         $adapter = new Adapter($userRepository, $injector);
 

@@ -120,7 +120,7 @@ class Shift implements ShiftInterface
     }
 
     /**
-     * @param \DateTime $start_time
+     * @param \DateTime|string $start_time
      */
     public function setStartTime($start_time)
     {
@@ -140,7 +140,7 @@ class Shift implements ShiftInterface
     }
 
     /**
-     * @param \DateTime $end_time
+     * @param \DateTime|string $end_time
      */
     public function setEndTime($end_time)
     {
