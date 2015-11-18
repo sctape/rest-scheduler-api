@@ -1,5 +1,5 @@
 <?php namespace Scheduler\Shifts\Commands;
-use Scheduler\Shifts\Entity\Shift;
+use Scheduler\Shifts\Contracts\Shift;
 use Scheduler\Shifts\Repository\ShiftRepository;
 use Scheduler\Users\Repository\UserRepository;
 
@@ -14,41 +14,41 @@ class CreateShiftHandler
      * @var UserRepository
      */
     private $userRepository;
+
     /**
      * @var ShiftRepository
      */
     private $shiftRepository;
 
     /**
+     * @var Shift
+     */
+    private $shift;
+
+    /**
      * CreateShiftHandler constructor.
      * @param UserRepository $userRepository
      * @param ShiftRepository $shiftRepository
+     * @param Shift $shift
      */
-    public function __construct(UserRepository $userRepository, ShiftRepository $shiftRepository)
+    public function __construct(UserRepository $userRepository, ShiftRepository $shiftRepository, Shift $shift)
     {
         $this->userRepository = $userRepository;
         $this->shiftRepository = $shiftRepository;
+        $this->shift = $shift;
     }
 
     public function handle(CreateShift $command)
     {
-//        var_dump($command);
-//        exit;
+        $this->shift->setBreak($command->break);
+        $this->shift->setEmployee($this->userRepository->getOneById($command->employee_id));
+        $this->shift->setManager($this->userRepository->getOneById($command->manager_id));
+        $this->shift->setStartTime($command->start_time);
+        $this->shift->setEndTime($command->end_time);
 
-        $shift = new Shift();
-        $shift->setBreak($command->break);
-        $shift->setEmployee($this->userRepository->getOneById($command->employee_id));
-        $shift->setManager($this->userRepository->getOneById($command->manager_id));
-        $shift->setStartTime(new \DateTime($command->start_time));
-        $shift->setEndTime(new \DateTime($command->end_time));
+        $this->shiftRepository->store($this->shift);
 
-        $this->shiftRepository->store($shift);
-
-//        var_dump($shift);
-//        exit;
-//        $this->shiftRepository->update($shift);
-
-        return $shift;
+        return $this->shift;
     }
 
 }

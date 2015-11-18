@@ -9,11 +9,14 @@
         "sparkphp/auth": "^0.2.1",
         "league/fractal": "^0.13.0",
         "league/tactician": "^0.6.1",
-        "league/tactician-doctrine": "^0.6.0"
+        "league/tactician-doctrine": "^0.6.0",
+        "codeception/codeception": "*",
+        "mockery/mockery": "^0.9.4"
     },
     "autoload": {
         "psr-4": {
-            "Scheduler\\": "src/"
+            "Scheduler\\": "src/",
+            "Scheduler\\Codeception\\Unit\\": "tests/unit"
         }
     },
     "authors": [

@@ -123,6 +123,10 @@ class Shift implements ShiftInterface
      */
     public function setStartTime($start_time)
     {
+        if (! ($start_time instanceof \DateTime)) {
+            $start_time = new \DateTime($start_time);
+        }
+
         $this->start_time = $start_time;
     }
 
@@ -139,6 +143,10 @@ class Shift implements ShiftInterface
      */
     public function setEndTime($end_time)
     {
+        if (! ($end_time instanceof \DateTime)) {
+            $end_time = new \DateTime($end_time);
+        }
+
         $this->end_time = $end_time;
     }
 }
