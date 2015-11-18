@@ -11,6 +11,7 @@ use Scheduler\Users\Contracts\User as UserInterface;
  *
  * @Entity(repositoryClass="Scheduler\Users\Repository\UserRepository")
  * @Table(name="users")
+ * @HasLifecycleCallbacks
  */
 class User implements UserInterface, Caller
 {

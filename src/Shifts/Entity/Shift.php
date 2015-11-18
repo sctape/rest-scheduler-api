@@ -11,6 +11,7 @@ use Scheduler\Users\Contracts\User;
  *
  * @Entity(repositoryClass="Scheduler\Shifts\Repository\ShiftRepository")
  * @Table(name="shifts")
+ * @HasLifecycleCallbacks
  */
 class Shift implements ShiftInterface
 {

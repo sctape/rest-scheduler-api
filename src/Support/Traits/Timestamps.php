@@ -10,16 +10,16 @@ use DateTime;
 trait Timestamps
 {
     /**
-     * @ORM\Column(name="created_at", type="datetime", nullable=false)
+     * @Column(name="created_at", type="datetime", nullable=false)
      * @var \DateTime
      */
-    private $created_at;
+    protected $created_at;
 
     /**
-     * @ORM\Column(name="updated_at", type="datetime", nullable=false)
+     * @Column(name="updated_at", type="datetime", nullable=false)
      * @var \DateTime
      */
-    private $updated_at;
+    protected $updated_at;
 
     /**
      * @PrePersist
