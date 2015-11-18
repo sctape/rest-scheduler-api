@@ -1,4 +1,5 @@
 <?php namespace Scheduler\Users\Contracts;
+use DateTime;
 
 /**
  * Interface User
@@ -53,22 +54,22 @@ interface User
     public function setPhone($phone);
 
     /**
-     * @return \DateTime
+     * @return DateTime
      */
     public function getCreatedAt();
 
     /**
-     * @param \DateTime $created_at
+     * @param DateTime $created_at
      */
-    public function setCreatedAt($created_at);
+    public function setCreatedAt(DateTime $created_at);
 
     /**
-     * @return \DateTime
+     * @return DateTime
      */
     public function getUpdatedAt();
 
     /**
-     * @param \DateTime $updated_at
+     * @param DateTime $updated_at
      */
-    public function setUpdatedAt($updated_at);
+    public function setUpdatedAt(DateTime $updated_at);
 }

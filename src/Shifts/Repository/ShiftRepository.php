@@ -1,6 +1,7 @@
 <?php namespace Scheduler\Shifts\Repository;
 
 use Doctrine\ORM\EntityRepository;
+use Scheduler\Repository\Contracts\DoctrineRepository;
 use Scheduler\Shifts\Contracts\Shift;
 use Scheduler\Users\Contracts\User;
 
@@ -9,7 +10,7 @@ use Scheduler\Users\Contracts\User;
  * @package Scheduler\Shifts\Repository
  * @author Sam Tape <sctape@gmail.com>
  */
-class ShiftRepository extends EntityRepository
+class ShiftRepository extends EntityRepository implements DoctrineRepository
 {
     /**
      * @param $id
@@ -27,5 +28,16 @@ class ShiftRepository extends EntityRepository
     public function getByEmployee(User $employee)
     {
         return $this->findByEmployee($employee);
+    }
+
+    /**
+     * Persist entity to the database
+     *
+     * @param Shift $shift
+     * @return void
+     */
+    public function store($shift)
+    {
+        $this->_em->persist($shift);
     }
 }

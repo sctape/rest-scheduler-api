@@ -23,6 +23,9 @@ $injector->prepare(
 
         $router->get('/users/{id}/shifts', 'Scheduler\Users\Domain\GetUserShifts');
         $router->post('/users/{id}/shifts', 'Scheduler\Users\Domain\GetUserShifts');
+
+        $router->get('/shifts/create', 'Scheduler\Shifts\Domain\StoreShift');
+        $router->post('/shifts/create', 'Scheduler\Shifts\Domain\StoreShift');
     }
 );
 

@@ -14,8 +14,12 @@ class UserTransformer extends TransformerAbstract
      * @param User $user
      * @return array
      */
-    public function transform($user)
+    public function transform(User $user = null)
     {
+        if (is_null($user)) {
+            return [];
+        }
+
         return [
             'id'      => (int) $user->getId(),
             'name'   => $user->getName(),

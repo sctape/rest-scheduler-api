@@ -19,23 +19,22 @@ class DoctrineConfiguration implements ConfigurationInterface
      */
     public function apply(Injector $injector)
     {
-        $injector->delegate(EntityManager::class, function() {
-            $paths = [
-                "src/Users/Entity/",
-                "src/Shifts/Entity/"
-            ];
-            $isDevMode = true;
+        $paths = [
+            "src/Users/Entity/",
+            "src/Shifts/Entity/"
+        ];
 
-            // the connection configuration
-            $dbParams = array(
-                'driver'   => 'pdo_mysql',
-                'user'     => 'homestead',
-                'password' => 'secret',
-                'dbname'   => 'scheduler',
-            );
+        $isDevMode = true;
 
-            $config = Setup::createAnnotationMetadataConfiguration($paths, $isDevMode);
-            return EntityManager::create($dbParams, $config);
-        });
+        // the connection configuration
+        $dbParams = array(
+            'driver'   => 'pdo_mysql',
+            'user'     => 'homestead',
+            'password' => 'secret',
+            'dbname'   => 'scheduler',
+        );
+
+        $config = Setup::createAnnotationMetadataConfiguration($paths, $isDevMode);
+        $injector->share(EntityManager::create($dbParams, $config));
     }
 }

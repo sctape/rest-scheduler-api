@@ -1,7 +1,8 @@
 <?php namespace Scheduler\Shifts\Entity;
 
 use Scheduler\Shifts\Contracts\Shift as ShiftInterface;
-use Scheduler\Users\Entity\User;
+use Scheduler\Support\Traits\Timestamps;
+use Scheduler\Users\Contracts\User;
 
 /**
  * Class Shift
@@ -13,6 +14,8 @@ use Scheduler\Users\Entity\User;
  */
 class Shift implements ShiftInterface
 {
+    use Timestamps;
+
     /**
      * @var int
      * @Id
@@ -52,18 +55,6 @@ class Shift implements ShiftInterface
     protected $end_time;
 
     /**
-     * @var \DateTime
-     * @Column(type="datetime")
-     */
-    protected $created_at;
-
-    /**
-     * @var \DateTime
-     * @Column(type="datetime")
-     */
-    protected $updated_at;
-
-    /**
      * @return int
      */
     public function getId()
@@ -82,7 +73,7 @@ class Shift implements ShiftInterface
     /**
      * @param User $manager
      */
-    public function setManager($manager)
+    public function setManager(User $manager = null)
     {
         $this->manager = $manager;
     }
@@ -98,7 +89,7 @@ class Shift implements ShiftInterface
     /**
      * @param mixed $employee
      */
-    public function setEmployee($employee)
+    public function setEmployee(User $employee = null)
     {
         $this->employee = $employee;
     }
@@ -149,37 +140,5 @@ class Shift implements ShiftInterface
     public function setEndTime($end_time)
     {
         $this->end_time = $end_time;
-    }
-
-    /**
-     * @return \DateTime
-     */
-    public function getCreatedAt()
-    {
-        return $this->created_at;
-    }
-
-    /**
-     * @param \DateTime $created_at
-     */
-    public function setCreatedAt($created_at)
-    {
-        $this->created_at = $created_at;
-    }
-
-    /**
-     * @return \DateTime
-     */
-    public function getUpdatedAt()
-    {
-        return $this->updated_at;
-    }
-
-    /**
-     * @param \DateTime $updated_at
-     */
-    public function setUpdatedAt($updated_at)
-    {
-        $this->updated_at = $updated_at;
     }
 }

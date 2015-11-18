@@ -1,6 +1,7 @@
 <?php namespace Scheduler\Users\Repository;
 
 use Doctrine\ORM\EntityRepository;
+use Scheduler\Repository\Contracts\DoctrineRepository;
 use Scheduler\Users\Contracts\User;
 
 /**
@@ -8,7 +9,7 @@ use Scheduler\Users\Contracts\User;
  * @package Scheduler\Users\Repository
  * @author Sam Tape <sctape@gmail.com>
  */
-class UserRepository extends EntityRepository
+class UserRepository extends EntityRepository implements DoctrineRepository
 {
     /**
      * @param int $id
@@ -26,5 +27,16 @@ class UserRepository extends EntityRepository
     public function getOneByToken($token)
     {
         return $this->findOneByToken($token);
+    }
+
+    /**
+     * Persist entity to the database
+     *
+     * @param User $entity
+     * @return void
+     */
+    public function store($entity)
+    {
+        $this->_em->persist($entity);
     }
 }

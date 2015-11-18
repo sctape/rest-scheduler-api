@@ -1,6 +1,7 @@
 <?php namespace Scheduler\Shifts\Contracts;
 
-use Scheduler\Users\Entity\User;
+use DateTime;
+use Scheduler\Users\Contracts\User;
 
 /**
  * Interface Shift
@@ -22,7 +23,7 @@ interface Shift
     /**
      * @param User $manager
      */
-    public function setManager($manager);
+    public function setManager(User $manager = null);
 
     /**
      * @return mixed
@@ -32,7 +33,7 @@ interface Shift
     /**
      * @param mixed $employee
      */
-    public function setEmployee($employee);
+    public function setEmployee(User $employee = null);
 
     /**
      * @return float
@@ -45,42 +46,42 @@ interface Shift
     public function setBreak($break);
 
     /**
-     * @return \DateTime
+     * @return DateTime
      */
     public function getStartTime();
 
     /**
-     * @param \DateTime $start_time
+     * @param DateTime $start_time
      */
     public function setStartTime($start_time);
 
     /**
-     * @return \DateTime
+     * @return DateTime
      */
     public function getEndTime();
 
     /**
-     * @param \DateTime $end_time
+     * @param DateTime $end_time
      */
     public function setEndTime($end_time);
 
     /**
-     * @return \DateTime
+     * @return DateTime
      */
     public function getCreatedAt();
 
     /**
-     * @param \DateTime $created_at
+     * @param DateTime $created_at
      */
-    public function setCreatedAt($created_at);
+    public function setCreatedAt(DateTime $created_at);
 
     /**
-     * @return \DateTime
+     * @return DateTime
      */
     public function getUpdatedAt();
 
     /**
-     * @param \DateTime $updated_at
+     * @param DateTime $updated_at
      */
-    public function setUpdatedAt($updated_at);
+    public function setUpdatedAt(DateTime $updated_at);
 }

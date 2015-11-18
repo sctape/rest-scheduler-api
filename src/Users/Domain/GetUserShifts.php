@@ -53,6 +53,10 @@ class GetUserShifts implements DomainInterface
         $this->fractal = $fractal;
     }
 
+    /**
+     * @param array $input
+     * @return PayloadInterface
+     */
     public function __invoke(array $input)
     {
         $employee = $this->userRepository->getOneById($input['id']);
