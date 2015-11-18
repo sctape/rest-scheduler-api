@@ -1,10 +1,15 @@
 <?php namespace Scheduler\Shifts\Domain;
 
 use League\Fractal\Manager;
+use League\Fractal\Resource\Item;
 use League\Tactician\CommandBus;
+use Scheduler\Exception\UserNotAuthorized;
 use Scheduler\Shifts\Commands\UpdateShift as UpdateShiftCommand;
+use Scheduler\Shifts\Transformer\ShiftTransformer;
+use Scheduler\Support\Traits\AuthorizeUser;
 use Spark\Adr\DomainInterface;
 use Spark\Adr\PayloadInterface;
+use Spark\Auth\AuthHandler;
 use Spark\Auth\Token;
 
 /**
@@ -14,6 +19,8 @@ use Spark\Auth\Token;
  */
 class UpdateShift implements DomainInterface
 {
+    use AuthorizeUser;
+
     /**
      * @var PayloadInterface
      */
@@ -57,13 +64,14 @@ class UpdateShift implements DomainInterface
      */
     public function __invoke(array $input)
     {
-        var_dump($input);
-        exit;
+        //Check that user is authorized to edit this resource
+        $this->authorizeUser($input[AuthHandler::TOKEN_ATTRIBUTE]->getMetadata('entity'), 'edit', 'shifts');
 
-        $this->commandBus->handle(new UpdateShiftCommand($input['id'], $input['break'], $input['start_time'], $input['end_time']));
+        $shift = $this->commandBus->handle(new UpdateShiftCommand($input['id'], $input['break'], $input['start_time'], $input['end_time']));
+        $shiftItem = new Item($shift, new ShiftTransformer);
 
         return $this->payload
-            ->withStatus(PayloadInterface::OK);
-//            ->withOutput($this->fractal->createData($shiftItem)->toArray());
+            ->withStatus(PayloadInterface::OK)
+            ->withOutput($this->fractal->createData($shiftItem)->toArray());
     }
 }

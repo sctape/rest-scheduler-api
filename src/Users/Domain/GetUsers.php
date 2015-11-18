@@ -2,6 +2,7 @@
 
 use League\Fractal\Manager;
 use League\Fractal\Resource\Item;
+use Scheduler\Support\Traits\AuthorizeUser;
 use Scheduler\Users\Repository\UserRepository;
 use Scheduler\Users\Transformer\UserTransformer;
 use Spark\Adr\DomainInterface;
@@ -16,6 +17,8 @@ use Spark\Auth\Token;
  */
 class GetUsers implements DomainInterface
 {
+    use AuthorizeUser;
+
     /**
      * @var PayloadInterface
      */
@@ -67,10 +70,7 @@ class GetUsers implements DomainInterface
     public function __invoke(array $input)
     {
         //Check that user is authorized to view this resource
-        if ($this->lockManager->caller($input[AuthHandler::TOKEN_ATTRIBUTE]->getMetadata('entity'))->cannot('view', 'users')) {
-            return $this->payload
-                ->withStatus(PayloadInterface::INVALID);
-        }
+        $this->authorizeUser($input[AuthHandler::TOKEN_ATTRIBUTE]->getMetadata('entity'), 'view', 'users');
 
         //Get user from repository and transform into resource
         $user = $this->userRepository->getOneById($input['id']);
