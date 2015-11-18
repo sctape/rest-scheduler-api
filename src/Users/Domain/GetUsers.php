@@ -6,6 +6,7 @@ use Scheduler\Users\Repository\UserRepository;
 use Scheduler\Users\Transformer\UserTransformer;
 use Spark\Adr\DomainInterface;
 use Spark\Adr\PayloadInterface;
+use Spark\Auth\Token;
 
 /**
  * Class GetUsers
@@ -35,17 +36,32 @@ class GetUsers implements DomainInterface
     private $fractal;
 
     /**
+     * @var Token
+     */
+    private $authToken;
+
+    /**
+     * @var \BeatSwitch\Lock\Manager
+     */
+    private $lockManager;
+
+    /**
      * @param PayloadInterface $payload
      * @param UserRepository $userRepository
      * @param UserTransformer $userTransformer
      * @param Manager $fractal
+     * @param Token $authToken
+     * @param \BeatSwitch\Lock\Manager $lockManager
+     * @internal param ServerRequestInterface $request
      */
-    public function __construct(PayloadInterface $payload, UserRepository $userRepository, UserTransformer $userTransformer, Manager $fractal)
+    public function __construct(PayloadInterface $payload, UserRepository $userRepository, UserTransformer $userTransformer, Manager $fractal, Token $authToken, \BeatSwitch\Lock\Manager $lockManager)
     {
         $this->payload = $payload;
         $this->userRepository = $userRepository;
         $this->userTransformer = $userTransformer;
         $this->fractal = $fractal;
+        $this->authToken = $authToken;
+        $this->lockManager = $lockManager;
     }
 
     /**
@@ -56,6 +72,13 @@ class GetUsers implements DomainInterface
      */
     public function __invoke(array $input)
     {
+        //Check that user is authorized to view this resource
+        if ($this->lockManager->caller($this->authToken->getMetadata('entity'))->cannot('view', 'users')) {
+            return $this->payload
+                ->withStatus(PayloadInterface::INVALID);
+        }
+
+        //Get user from repository and transform into resource
         $user = $this->userRepository->getOneById($input['id']);
         $resource = new Item($user, $this->userTransformer);
 

@@ -1,5 +1,6 @@
 <?php namespace Scheduler\Users\Entity;
 
+use BeatSwitch\Lock\Callers\Caller;
 use Scheduler\Support\Traits\Timestamps;
 use Scheduler\Users\Contracts\User as UserInterface;
 
@@ -11,7 +12,7 @@ use Scheduler\Users\Contracts\User as UserInterface;
  * @Entity(repositoryClass="Scheduler\Users\Repository\UserRepository")
  * @Table(name="users")
  */
-class User implements UserInterface
+class User implements UserInterface, Caller
 {
     use Timestamps;
 
@@ -123,5 +124,35 @@ class User implements UserInterface
     public function setPhone($phone)
     {
         $this->phone = $phone;
+    }
+
+    /**
+     * The type of caller
+     *
+     * @return string
+     */
+    public function getCallerType()
+    {
+        return 'users';
+    }
+
+    /**
+     * The unique ID to identify the caller with
+     *
+     * @return int
+     */
+    public function getCallerId()
+    {
+        return $this->getId();
+    }
+
+    /**
+     * The caller's roles
+     *
+     * @return array
+     */
+    public function getCallerRoles()
+    {
+        return [$this->getRole()];
     }
 }

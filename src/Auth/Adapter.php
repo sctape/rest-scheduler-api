@@ -1,8 +1,10 @@
 <?php namespace Scheduler\Auth;
 
+use Auryn\Injector;
 use Scheduler\Users\Repository\UserRepository;
 use Spark\Auth\AdapterInterface;
 use Spark\Auth\Credentials;
+use Spark\Auth\Exception\AuthException;
 use Spark\Auth\Exception\InvalidException;
 use Spark\Auth\Token;
 
@@ -17,14 +19,19 @@ class Adapter implements AdapterInterface
      * @var UserRepository
      */
     private $userRepository;
+    /**
+     * @var Injector
+     */
+    private $injector;
 
     /**
      * @param UserRepository $userRepository
+     * @param Injector $injector
      */
-    public function __construct(UserRepository $userRepository)
+    public function __construct(UserRepository $userRepository, Injector $injector)
     {
-
         $this->userRepository = $userRepository;
+        $this->injector = $injector;
     }
 
     /**
@@ -47,7 +54,9 @@ class Adapter implements AdapterInterface
     public function validateToken($token)
     {
         if ($user = $this->userRepository->getOneByToken($token)) {
-            return new Token($token, ['id' => $user->getId(), 'entity' => serialize($user)]);
+            $newToken = new Token($token, ['id' => $user->getId(), 'entity' => $user]);
+            $this->injector->share($newToken);
+            return $newToken;
         }
 
         throw new InvalidException;
@@ -73,5 +82,6 @@ class Adapter implements AdapterInterface
     public function validateCredentials(Credentials $credentials)
     {
         // TODO: Implement validateCredentials() method.
+        throw new AuthException('Authentication via credentials not supported');
     }
 }

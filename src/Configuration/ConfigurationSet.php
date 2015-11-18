@@ -18,6 +18,7 @@ class ConfigurationSet extends \Spark\Configuration\ConfigurationSet
             AliasConfiguration::class,
             AuthConfiguration::class,
             TacticianConfiguration::class,
+            AclConfiguration::class,
         ]);
     }
 }

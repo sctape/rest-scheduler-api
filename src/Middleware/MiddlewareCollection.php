@@ -16,9 +16,11 @@ class MiddlewareCollection extends Collection
      */
     public function __construct(DefaultCollection $defaults)
     {
-        $middlewares = array_merge($defaults->getArrayCopy(), [
+        $middlewares = array_merge([
             AuthHandler::class
-        ]);
+            ],
+            $defaults->getArrayCopy()
+        );
         parent::__construct($middlewares);
     }
 

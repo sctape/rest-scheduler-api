@@ -11,7 +11,8 @@
         "league/tactician": "^0.6.1",
         "league/tactician-doctrine": "^0.6.0",
         "codeception/codeception": "*",
-        "mockery/mockery": "^0.9.4"
+        "mockery/mockery": "^0.9.4",
+        "beatswitch/lock": "^0.2.0"
     },
     "autoload": {
         "psr-4": {
