@@ -19,6 +19,7 @@ class Adapter implements AdapterInterface
      * @var UserRepository
      */
     private $userRepository;
+
     /**
      * @var Injector
      */
@@ -54,9 +55,9 @@ class Adapter implements AdapterInterface
     public function validateToken($token)
     {
         if ($user = $this->userRepository->getOneByToken($token)) {
-            $newToken = new Token($token, ['id' => $user->getId(), 'entity' => $user]);
-            $this->injector->share($newToken);
-            return $newToken;
+            $validatedToken = new Token($token, ['id' => $user->getId(), 'entity' => $user]);
+            $this->injector->share($validatedToken);
+            return $validatedToken;
         }
 
         throw new InvalidException;

@@ -1,4 +1,5 @@
-<?php namespace Scheduler\Codeception\Unit;
+<?php namespace Scheduler\Codeception\Unit\Shifts\Commands;
+
 use Codeception\TestCase\Test;
 use Mockery;
 use Scheduler\Shifts\Commands\CreateShift;
@@ -10,7 +11,7 @@ use Scheduler\Users\Repository\UserRepository;
 
 /**
  * Class CreateShiftHandlerTest
- * @package Scheduler\Codeception\Unit
+ * @package Scheduler\Codeception\Unit\Shifts\Commands
  * @author Sam Tape <sctape@gmail.com>
  */
 class CreateShiftHandlerTest extends Test
