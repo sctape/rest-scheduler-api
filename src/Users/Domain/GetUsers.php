@@ -9,6 +9,7 @@ use Spark\Adr\DomainInterface;
 use Spark\Adr\PayloadInterface;
 use Spark\Auth\AuthHandler;
 use Spark\Auth\Token;
+use Respect\Validation\Validator as v;
 
 /**
  * Class GetUsers
@@ -72,8 +73,12 @@ class GetUsers implements DomainInterface
         //Check that user is authorized to view this resource
         $this->authorizeUser($input[AuthHandler::TOKEN_ATTRIBUTE]->getMetadata('entity'), 'view', 'users');
 
+        //Validate input
+        $inputValidator = v::key('id', v::intVal());
+        $inputValidator->assert($input);
+
         //Get user from repository and transform into resource
-        $user = $this->userRepository->getOneById($input['id']);
+        $user = $this->userRepository->getOneByIdOrFail($input['id']);
         $resource = new Item($user, $this->userTransformer);
 
         return $this->payload

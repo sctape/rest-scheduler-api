@@ -3,7 +3,6 @@
 use League\Fractal\Manager;
 use League\Fractal\Resource\Item;
 use League\Tactician\CommandBus;
-use Scheduler\Exception\UserNotAuthorized;
 use Scheduler\Shifts\Commands\UpdateShift as UpdateShiftCommand;
 use Scheduler\Shifts\Transformer\ShiftTransformer;
 use Scheduler\Support\Traits\AuthorizeUser;
@@ -11,6 +10,7 @@ use Spark\Adr\DomainInterface;
 use Spark\Adr\PayloadInterface;
 use Spark\Auth\AuthHandler;
 use Spark\Auth\Token;
+use Respect\Validation\Validator as v;
 
 /**
  * Class UpdateShift
@@ -67,6 +67,14 @@ class UpdateShift implements DomainInterface
         //Check that user is authorized to edit this resource
         $this->authorizeUser($input[AuthHandler::TOKEN_ATTRIBUTE]->getMetadata('entity'), 'edit', 'shifts');
 
+        //Validate input
+        $inputValidator = v::key('break', v::floatVal())
+            ->key('start_time', v::stringType())
+            ->key('end_time', v::stringType())
+            ->key('id', v::intVal());
+        $inputValidator->assert($input);
+
+        //Update shift data
         $shift = $this->commandBus->handle(new UpdateShiftCommand($input['id'], $input['break'], $input['start_time'], $input['end_time']));
         $shiftItem = new Item($shift, new ShiftTransformer);
 

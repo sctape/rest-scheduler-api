@@ -1,4 +1,5 @@
 <?php namespace Scheduler\Shifts\Domain;
+
 use League\Fractal\Manager;
 use League\Fractal\Resource\Collection;
 use Scheduler\Shifts\Repository\ShiftRepository;
@@ -7,6 +8,7 @@ use Scheduler\Support\Traits\AuthorizeUser;
 use Spark\Adr\DomainInterface;
 use Spark\Adr\PayloadInterface;
 use Spark\Auth\AuthHandler;
+use Respect\Validation\Validator as v;
 
 /**
  * Class GetShifts
@@ -60,8 +62,15 @@ class GetShifts implements DomainInterface
      */
     public function __invoke(array $input)
     {
+        //Authorize user to be able to view shifts
         $this->authorizeUser($input[AuthHandler::TOKEN_ATTRIBUTE]->getMetaData('entity'), 'view', 'shifts');
 
+        //Validate input
+        $inputValidator = v::key('startDateTime', v::stringType())
+            ->key('endDateTime', v::stringType());
+        $inputValidator->assert($input);
+
+        //Retrieve shifts between in time period
         $shifts = $this->shiftRepository->getShiftsBetween($input['startDateTime'], $input['endDateTime']);
         $shiftsCollection = new Collection($shifts, new ShiftTransformer);
 

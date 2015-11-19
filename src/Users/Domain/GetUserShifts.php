@@ -1,13 +1,4 @@
-<?php
-/**
- * Created by PhpStorm.
- * User: stape
- * Date: 11/17/15
- * Time: 4:16 PM
- */
-
-namespace Scheduler\Users\Domain;
-
+<?php namespace Scheduler\Users\Domain;
 
 use League\Fractal\Manager;
 use League\Fractal\Resource\Collection;
@@ -18,6 +9,7 @@ use Scheduler\Users\Repository\UserRepository;
 use Spark\Adr\DomainInterface;
 use Spark\Adr\PayloadInterface;
 use Spark\Auth\AuthHandler;
+use Respect\Validation\Validator as v;
 
 class GetUserShifts implements DomainInterface
 {
@@ -67,7 +59,12 @@ class GetUserShifts implements DomainInterface
             throw new UserNotAuthorized;
         }
 
-        $employee = $this->userRepository->getOneById($input['id']);
+        //Validate input
+        $inputValidator = v::key('id', v::intVal());
+        $inputValidator->assert($input);
+
+        //Get shifts and transform
+        $employee = $this->userRepository->getOneByIdOrFail($input['id']);
         $shifts = $this->shiftRepository->getByEmployee($employee);
         $shiftsCollection = new Collection($shifts, new ShiftTransformer);
 

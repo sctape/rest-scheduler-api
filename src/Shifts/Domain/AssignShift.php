@@ -9,6 +9,7 @@ use Scheduler\Support\Traits\AuthorizeUser;
 use Spark\Adr\DomainInterface;
 use Spark\Adr\PayloadInterface;
 use Spark\Auth\AuthHandler;
+use Respect\Validation\Validator as v;
 
 /**
  * Class AssignShift
@@ -64,6 +65,11 @@ class AssignShift implements DomainInterface
     {
         //Check that user has permission to edit this resource
         $this->authorizeUser($input[AuthHandler::TOKEN_ATTRIBUTE]->getMetaData('entity'), 'edit', 'shifts');
+
+        //Validate input
+        $inputValidator = v::key('id', v::intVal())
+            ->key('employee_id', v::intVal());
+        $inputValidator->assert($input);
 
         //Execute command to update employee on shift
         $shift = $this->commandBus->handle(new AssignShiftCommand($input['id'], $input['employee_id']));
