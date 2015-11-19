@@ -58,7 +58,7 @@ class Adapter implements AdapterInterface
             return new Token($token, ['id' => $user->getId(), 'entity' => $user]);
         }
 
-        throw new InvalidException;
+        throw new AuthException;
     }
 
     /**

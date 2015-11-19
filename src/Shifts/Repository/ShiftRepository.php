@@ -60,4 +60,28 @@ class ShiftRepository extends EntityRepository implements DoctrineRepository
 
         return $entity;
     }
+
+    /**
+     * Get all shifts that occur between the given start and end times
+     *
+     * @param string $startDateTime
+     * @param string $endDateTime
+     * @return Shift[]
+     */
+    public function getShiftsBetween($startDateTime, $endDateTime)
+    {
+        $qb = $this->createQueryBuilder('s')
+            ->addSelect('m, e')
+            ->leftJoin('s.manager', 'm')
+            ->leftJoin('s.employee', 'e')
+            ->andWhere('s.start_time < :endDateTime')
+            ->andWhere('s.end_time > :startDateTime')
+            ->orderBy('s.start_time')
+            ->setParameters([
+                'startDateTime' => date_create($startDateTime),
+                'endDateTime' => date_create($endDateTime)
+            ]);
+
+        return $qb->getQuery()->getResult();
+    }
 }

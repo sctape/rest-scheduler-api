@@ -46,7 +46,7 @@ class AdapterTest extends Test
     }
 
     /**
-     * @expectedException \Spark\Auth\Exception\InvalidException
+     * @expectedException \Spark\Auth\Exception\AuthException
      */
     public function testValidateTokenWithInvalidToken()
     {

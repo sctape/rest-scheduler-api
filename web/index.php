@@ -23,6 +23,7 @@ $injector->prepare(
         $router->post('/shifts/create', 'Scheduler\Shifts\Domain\StoreShift');
         $router->put('/shifts/{id}', 'Scheduler\Shifts\Domain\UpdateShift');
         $router->put('/shifts/{id}/assign/{employee_id}', 'Scheduler\Shifts\Domain\AssignShift');
+        $router->get('/shifts', 'Scheduler\Shifts\Domain\GetShifts');
     }
 );
 
