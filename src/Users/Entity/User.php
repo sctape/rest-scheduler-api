@@ -3,15 +3,16 @@
 use BeatSwitch\Lock\Callers\Caller;
 use Scheduler\Support\Traits\Timestamps;
 use Scheduler\Users\Contracts\User as UserInterface;
+use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Class User
  * @package Scheduler\Users\Entity
  * @author Sam Tape <sctape@gmail.com>
  *
- * @Entity(repositoryClass="Scheduler\Users\Repository\UserRepository")
- * @Table(name="users")
- * @HasLifecycleCallbacks
+ * @ORM\Entity(repositoryClass="Scheduler\Users\Repository\UserRepository")
+ * @ORM\Table(name="users")
+ * @ORM\HasLifecycleCallbacks
  */
 class User implements UserInterface, Caller
 {
@@ -19,39 +20,39 @@ class User implements UserInterface, Caller
 
     /**
      * @var int
-     * @Id
-     * @GeneratedValue
-     * @Column(type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue
+     * @ORM\Column(type="integer")
      */
     protected $id;
 
     /**
      * @var string
-     * @Column(type="string")
+     * @ORM\Column(type="string")
      */
     protected $name;
 
     /**
      * @var string
-     * @Column(type="string")
+     * @ORM\Column(type="string")
      */
     protected $role;
 
     /**
      * @var string
-     * @Column(type="string")
+     * @ORM\Column(type="string")
      */
     protected $email;
 
     /**
      * @var string
-     * @Column(type="string")
+     * @ORM\Column(type="string")
      */
     protected $phone;
 
     /**
      * @var string
-     * @Column(type="string")
+     * @ORM\Column(type="string")
      */
     protected $token;
 

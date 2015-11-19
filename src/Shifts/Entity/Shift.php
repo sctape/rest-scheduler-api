@@ -3,15 +3,16 @@
 use Scheduler\Shifts\Contracts\Shift as ShiftInterface;
 use Scheduler\Support\Traits\Timestamps;
 use Scheduler\Users\Contracts\User;
+use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Class Shift
  * @package Scheduler\Shifts\Entity
  * @author Sam Tape <sctape@gmail.com>
  *
- * @Entity(repositoryClass="Scheduler\Shifts\Repository\ShiftRepository")
- * @Table(name="shifts")
- * @HasLifecycleCallbacks
+ * @ORM\Entity(repositoryClass="Scheduler\Shifts\Repository\ShiftRepository")
+ * @ORM\Table(name="shifts")
+ * @ORM\HasLifecycleCallbacks
  */
 class Shift implements ShiftInterface
 {
@@ -19,39 +20,39 @@ class Shift implements ShiftInterface
 
     /**
      * @var int
-     * @Id
-     * @GeneratedValue
-     * @Column(type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue
+     * @ORM\Column(type="integer")
      */
     protected $id;
 
     /**
      * @var User
-     * @ManyToOne(targetEntity="\Scheduler\Users\Entity\User")
+     * @ORM\ManyToOne(targetEntity="\Scheduler\Users\Entity\User")
      */
     protected $manager;
 
     /**
      * @var User
-     * @ManyToOne(targetEntity="\Scheduler\Users\Entity\User")
+     * @ORM\ManyToOne(targetEntity="\Scheduler\Users\Entity\User")
      */
     protected $employee;
 
     /**
      * @var float
-     * @Column(type="float", nullable=true)
+     * @ORM\Column(type="float", nullable=true)
      */
     protected $break;
 
     /**
      * @var \DateTime
-     * @Column(type="datetime")
+     * @ORM\Column(type="datetime")
      */
     protected $start_time;
 
     /**
      * @var \DateTime
-     * @Column(type="datetime")
+     * @ORM\Column(type="datetime")
      */
     protected $end_time;
 

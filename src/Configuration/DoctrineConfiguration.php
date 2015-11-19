@@ -1,6 +1,7 @@
 <?php namespace Scheduler\Configuration;
 
 use Auryn\Injector;
+use Doctrine\Common\Annotations\AnnotationRegistry;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Tools\Setup;
 use Spark\Configuration\ConfigurationInterface;
@@ -34,7 +35,7 @@ class DoctrineConfiguration implements ConfigurationInterface
             'dbname'   => 'scheduler',
         );
 
-        $config = Setup::createAnnotationMetadataConfiguration($paths, $isDevMode);
+        $config = Setup::createAnnotationMetadataConfiguration($paths, $isDevMode, null, null, false);
         $injector->share(EntityManager::create($dbParams, $config));
     }
 }

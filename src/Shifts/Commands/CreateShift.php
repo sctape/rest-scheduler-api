@@ -7,10 +7,29 @@
  */
 class CreateShift
 {
+    /**
+     * @var int
+     */
     public $manager_id;
+
+    /**
+     * @var int
+     */
     public $employee_id;
+
+    /**
+     * @var float
+     */
     public $break;
+
+    /**
+     * @var string
+     */
     public $start_time;
+
+    /**
+     * @var string
+     */
     public $end_time;
 
     /**

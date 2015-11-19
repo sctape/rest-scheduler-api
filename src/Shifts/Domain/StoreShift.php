@@ -9,6 +9,7 @@ use Scheduler\Support\Traits\AuthorizeUser;
 use Spark\Adr\DomainInterface;
 use Spark\Adr\PayloadInterface;
 use Spark\Auth\AuthHandler;
+use Respect\Validation\Validator as v;
 
 /**
  * Class StoreShift
@@ -65,6 +66,14 @@ class StoreShift implements DomainInterface
         //Ensure that the use has permission to create shifts
         $this->authorizeUser($input[AuthHandler::TOKEN_ATTRIBUTE]->getMetaData('entity'), 'create', 'shifts');
 
+        //Validate input
+        $inputValidator = v::key('break', v::floatVal())
+            ->key('start_time', v::stringType())
+            ->key('end_time', v::stringType())
+            ->key('manager_id', v::intVal());
+        $inputValidator->assert($input);
+
+        //Execute command to create shift
         $shift = $this->commandBus->handle(new CreateShift($input['manager_id'], $input['employee_id'], $input['break'], $input['start_time'], $input['end_time']));
         $shiftItem = new Item($shift, new ShiftTransformer);
 
