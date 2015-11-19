@@ -3,7 +3,7 @@
 use League\Fractal\Manager;
 use League\Fractal\Resource\Item;
 use League\Tactician\CommandBus;
-use Scheduler\Shifts\Commands\CreateShift;
+use Scheduler\Shifts\Commands\AssignShift as AssignShiftCommand;
 use Scheduler\Shifts\Transformer\ShiftTransformer;
 use Scheduler\Support\Traits\AuthorizeUser;
 use Spark\Adr\DomainInterface;
@@ -11,11 +11,11 @@ use Spark\Adr\PayloadInterface;
 use Spark\Auth\AuthHandler;
 
 /**
- * Class StoreShift
+ * Class AssignShift
  * @package Scheduler\Shifts\Domain
  * @author Sam Tape <sctape@gmail.com>
  */
-class StoreShift implements DomainInterface
+class AssignShift implements DomainInterface
 {
     use AuthorizeUser;
 
@@ -40,7 +40,7 @@ class StoreShift implements DomainInterface
     private $lockManager;
 
     /**
-     * StoreShift constructor.
+     * AssignShift constructor.
      * @param PayloadInterface $payload
      * @param CommandBus $commandBus
      * @param Manager $fractal
@@ -57,19 +57,19 @@ class StoreShift implements DomainInterface
     /**
      * Handle domain logic for an action.
      *
-     * @param array $input
+     * @param  array $input
      * @return PayloadInterface
      */
     public function __invoke(array $input)
     {
-        //Ensure that the use has permission to create shifts
-        $this->authorizeUser($input[AuthHandler::TOKEN_ATTRIBUTE]->getMetaData('entity'), 'create', 'shifts');
+        //Check that user has permission to edit this resource
+        $this->authorizeUser($input[AuthHandler::TOKEN_ATTRIBUTE]->getMetaData('entity'), 'edit', 'shifts');
 
-        $shift = $this->commandBus->handle(new CreateShift($input['manager_id'], $input['employee_id'], $input['break'], $input['start_time'], $input['end_time']));
+        //Execute command to update employee on shift
+        $shift = $this->commandBus->handle(new AssignShiftCommand($input['id'], $input['employee_id']));
         $shiftItem = new Item($shift, new ShiftTransformer);
 
-        return $this->payload
-            ->withStatus(PayloadInterface::OK)
+        return $this->payload->withStatus(PayloadInterface::OK)
             ->withOutput($this->fractal->createData($shiftItem)->toArray());
     }
 }

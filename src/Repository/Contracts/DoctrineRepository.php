@@ -1,4 +1,5 @@
 <?php namespace Scheduler\Repository\Contracts;
+use Doctrine\ORM\EntityNotFoundException;
 
 /**
  * Interface DoctrineRepository
@@ -14,4 +15,14 @@ interface DoctrineRepository
      * @return void
      */
     public function store($entity);
+
+    /**
+     * Find an entity by id or throw exception
+     *
+     * @param $id
+     *
+     * @return object
+     * @throws EntityNotFoundException
+     */
+    public function getOneByIdOrFail($id);
 }

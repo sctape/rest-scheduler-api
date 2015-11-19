@@ -1,5 +1,6 @@
 <?php namespace Scheduler\Shifts\Repository;
 
+use Doctrine\ORM\EntityNotFoundException;
 use Doctrine\ORM\EntityRepository;
 use Scheduler\Repository\Contracts\DoctrineRepository;
 use Scheduler\Shifts\Contracts\Shift;
@@ -39,5 +40,24 @@ class ShiftRepository extends EntityRepository implements DoctrineRepository
     public function store($shift)
     {
         $this->_em->persist($shift);
+    }
+
+    /**
+     * Find an entity by id or throw exception
+     *
+     * @param $id
+     *
+     * @return Shift
+     * @throws EntityNotFoundException
+     */
+    public function getOneByIdOrFail($id)
+    {
+        $entity = $this->find($id);
+
+        if (!$entity) {
+            throw new EntityNotFoundException;
+        }
+
+        return $entity;
     }
 }

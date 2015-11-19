@@ -9,6 +9,8 @@ use League\Tactician\Handler\CommandNameExtractor\ClassNameExtractor;
 use League\Tactician\Handler\Locator\CallableLocator;
 use League\Tactician\Handler\MethodNameInflector\HandleInflector;
 use League\Tactician\Plugins\LockingMiddleware;
+use Scheduler\Shifts\Commands\AssignShift;
+use Scheduler\Shifts\Commands\AssignShiftHandler;
 use Scheduler\Shifts\Commands\CreateShift;
 use Scheduler\Shifts\Commands\CreateShiftHandler;
 use Scheduler\Shifts\Commands\UpdateShift;
@@ -27,7 +29,8 @@ class TacticianConfiguration implements ConfigurationInterface
      */
     protected static $commandHandlerMapping = [
         CreateShift::class => CreateShiftHandler::class,
-        UpdateShift::class => UpdateShiftHandler::class
+        UpdateShift::class => UpdateShiftHandler::class,
+        AssignShift::class => AssignShiftHandler::class,
     ];
 
     /**
