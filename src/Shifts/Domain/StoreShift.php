@@ -64,7 +64,13 @@ class StoreShift implements DomainInterface
     public function __invoke(array $input)
     {
         //Ensure that the use has permission to create shifts
-        $this->authorizeUser($input[AuthHandler::TOKEN_ATTRIBUTE]->getMetaData('entity'), 'create', 'shifts');
+        $user = $input[AuthHandler::TOKEN_ATTRIBUTE]->getMetaData('entity');
+        $this->authorizeUser($user, 'create', 'shifts');
+
+        //If no manager_id is specified in request, default to user creating shift
+        if (!array_key_exists('manager_id', $input)) {
+            $input['manager_id'] = $user->getId();
+        }
 
         //Validate input
         $inputValidator = v::key('break', v::floatVal())
