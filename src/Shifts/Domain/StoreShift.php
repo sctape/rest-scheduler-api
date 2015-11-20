@@ -74,8 +74,8 @@ class StoreShift implements DomainInterface
 
         //Validate input
         $inputValidator = v::key('break', v::floatVal())
-            ->key('start_time', v::stringType())
-            ->key('end_time', v::stringType())
+            ->key('start_time', v::date())
+            ->key('end_time', v::date()->min($input['start_time']))
             ->key('manager_id', v::intVal());
         $inputValidator->assert($input);
 

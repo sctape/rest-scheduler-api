@@ -26,7 +26,6 @@ foreach($schemaManager->listTableNames() as $tableName) {
 }
 $connection->query('SET FOREIGN_KEY_CHECKS=1');
 
-
 //Seed objects from fixtures
 $objects = \Nelmio\Alice\Fixtures::load(__DIR__.'/fixtures.yml', $entityManager);
 
