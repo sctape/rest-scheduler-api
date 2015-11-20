@@ -12,6 +12,18 @@ settings:
 extensions:
     enabled:
         - Codeception\Extension\RunFailed
+coverage:
+    enabled: true
+    whitelist:
+      include:
+        - src/*
+    blacklist:
+      include:
+        - config/*
+        - web/*
+        - tests/*
+        - fixtures/*
+        - vendor/*
 modules:
     config:
         Db:
