@@ -5,7 +5,6 @@ use Scheduler\Users\Repository\UserRepository;
 use Spark\Auth\AdapterInterface;
 use Spark\Auth\Credentials;
 use Spark\Auth\Exception\AuthException;
-use Spark\Auth\Exception\InvalidException;
 use Spark\Auth\Token;
 
 /**

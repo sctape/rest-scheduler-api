@@ -3,9 +3,7 @@
 use Exception;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
-use Respect\Validation\Exceptions\AllOfException;
 use Respect\Validation\Exceptions\NestedValidationException;
-use Scheduler\Exception\ValidationException;
 
 class ExceptionHandler
 {
