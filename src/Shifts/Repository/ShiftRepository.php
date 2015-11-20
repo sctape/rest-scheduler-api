@@ -84,4 +84,19 @@ class ShiftRepository extends EntityRepository implements DoctrineRepository
 
         return $qb->getQuery()->getResult();
     }
+
+    /**
+     * @param User $employee
+     * @return array
+     */
+    public function getHoursCountGroupedByWeekFor(User $employee)
+    {
+        $dbal = $this->_em->getConnection();
+
+        return $dbal->executeQuery("SELECT
+  YEARWEEK(start_time) as year_week,
+  (SELECT STR_TO_DATE(CONCAT(year_week, ' Sunday'), '%X%V %W')) as week_start,
+  (SELECT STR_TO_DATE(CONCAT(year_week, ' Saturday'), '%X%V %W')) as week_end,
+  sum(TO_SECONDS(end_time)-TO_SECONDS(start_time))/3600 as hours_count FROM shifts WHERE employee_id = :employee_id GROUP BY year_week;", ['employee_id' => $employee->getId()])->fetchAll();
+    }
 }

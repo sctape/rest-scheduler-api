@@ -4,14 +4,13 @@ use League\Fractal\Manager;
 use League\Fractal\Resource\Collection;
 use Scheduler\Exception\UserNotAuthorized;
 use Scheduler\Shifts\Repository\ShiftRepository;
-use Scheduler\Shifts\Transformer\ShiftTransformer;
+use Scheduler\Shifts\Transformer\HoursTransformer;
 use Scheduler\Users\Repository\UserRepository;
 use Spark\Adr\DomainInterface;
 use Spark\Adr\PayloadInterface;
 use Spark\Auth\AuthHandler;
-use Respect\Validation\Validator as v;
 
-class GetUserShifts implements DomainInterface
+class GetUserHours implements DomainInterface
 {
     /**
      * @var PayloadInterface
@@ -34,12 +33,13 @@ class GetUserShifts implements DomainInterface
     private $fractal;
 
     /**
+     * GetUserHours constructor.
      * @param PayloadInterface $payload
-     * @param UserRepository $userRepository
      * @param ShiftRepository $shiftRepository
+     * @param UserRepository $userRepository
      * @param Manager $fractal
      */
-    public function __construct(PayloadInterface $payload, UserRepository $userRepository, ShiftRepository $shiftRepository, Manager $fractal)
+    public function __construct(PayloadInterface $payload, ShiftRepository $shiftRepository, UserRepository $userRepository, Manager $fractal)
     {
         $this->payload = $payload;
         $this->shiftRepository = $shiftRepository;
@@ -48,30 +48,27 @@ class GetUserShifts implements DomainInterface
     }
 
     /**
-     * @param array $input
+     * Handle domain logic for an action.
+     *
+     * @param  array $input
      * @return PayloadInterface
      * @throws UserNotAuthorized
      */
     public function __invoke(array $input)
     {
-        //Don't allow employees to view other employee's shifts
-        //todo: figure out if managers can access all employees' shifts
+        //Make sure requested user matches auth user
+        //todo: figure out if managers can access all employees' hours
         if ($input['id'] != $input[AuthHandler::TOKEN_ATTRIBUTE]->getMetaData('id')) {
             throw new UserNotAuthorized;
         }
 
-        //Validate input
-        $inputValidator = v::key('id', v::intVal());
-        $inputValidator->assert($input);
-
-        //Get shifts and transform
+        //Get hours and transform to more readable collection
         $employee = $this->userRepository->getOneByIdOrFail($input['id']);
-        $shifts = $this->shiftRepository->getByEmployee($employee);
-        $shiftsCollection = new Collection($shifts, new ShiftTransformer);
+        $hours = $this->shiftRepository->getHoursCountGroupedByWeekFor($employee);
+        $hoursCollection = new Collection($hours, new HoursTransformer);
 
         return $this->payload
             ->withStatus(PayloadInterface::OK)
-            ->withOutput($this->fractal->createData($shiftsCollection)->toArray());
+            ->withOutput($this->fractal->createData($hoursCollection)->toArray());
     }
-
 }
