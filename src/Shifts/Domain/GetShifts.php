@@ -75,6 +75,6 @@ class GetShifts implements DomainInterface
         $shiftsCollection = new Collection($shifts, new ShiftTransformer);
 
         return $this->payload->withStatus(PayloadInterface::OK)
-            ->withOutput($this->fractal->createData($shiftsCollection)->toArray());
+            ->withOutput($this->fractal->parseIncludes(['manager', 'employee'])->createData($shiftsCollection)->toArray());
     }
 }

@@ -76,6 +76,6 @@ class AssignShift implements DomainInterface
         $shiftItem = new Item($shift, new ShiftTransformer);
 
         return $this->payload->withStatus(PayloadInterface::OK)
-            ->withOutput($this->fractal->createData($shiftItem)->toArray());
+            ->withOutput($this->fractal->parseIncludes(['manager','employee'])->createData($shiftItem)->toArray());
     }
 }

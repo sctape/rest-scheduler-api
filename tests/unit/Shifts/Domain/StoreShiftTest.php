@@ -47,6 +47,7 @@ class StoreShiftTest extends Test
 
         $fractal = mockery::mock(Manager::class);
         $fractal->shouldReceive('createData')->once()->with($item)->andReturn($scope);
+        $fractal->shouldReceive('parseIncludes')->once()->with(['manager','employee'])->andReturnSelf();
 
         $token = mockery::mock(Token::class);
         $token->shouldReceive('getMetadata')->once()->with('entity')->andReturn($user);
@@ -93,6 +94,7 @@ class StoreShiftTest extends Test
 
         $fractal = mockery::mock(Manager::class);
         $fractal->shouldReceive('createData')->once()->with($item)->andReturn($scope);
+        $fractal->shouldReceive('parseIncludes')->once()->with(['manager','employee'])->andReturnSelf();
 
         $token = mockery::mock(Token::class);
         $token->shouldReceive('getMetadata')->once()->with('entity')->andReturn($user);
@@ -142,6 +144,7 @@ class StoreShiftTest extends Test
 
         $fractal = mockery::mock(Manager::class);
         $fractal->shouldReceive('createData')->once()->with($item)->andReturn($scope);
+        $fractal->shouldReceive('parseIncludes')->once()->with(['manager','employee'])->andReturnSelf();
 
         $token = mockery::mock(Token::class);
         $token->shouldReceive('getMetadata')->once()->with('entity')->andReturn($user);

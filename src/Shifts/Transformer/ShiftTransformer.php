@@ -17,7 +17,7 @@ class ShiftTransformer extends TransformerAbstract
      *
      * @var array
      */
-    protected $defaultIncludes = [
+    protected $availableIncludes = [
         'employee',
         'manager'
     ];

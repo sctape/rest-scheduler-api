@@ -99,6 +99,6 @@ class StoreShift implements DomainInterface
 
         return $this->payload
             ->withStatus(PayloadInterface::OK)
-            ->withOutput($this->fractal->createData($this->item)->toArray());
+            ->withOutput($this->fractal->parseIncludes(['manager', 'employee'])->createData($this->item)->toArray());
     }
 }

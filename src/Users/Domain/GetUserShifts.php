@@ -69,9 +69,11 @@ class GetUserShifts implements DomainInterface
         $shifts = $this->shiftRepository->getByEmployee($employee);
         $shiftsCollection = new Collection($shifts, new ShiftTransformer);
 
+        $include = array_key_exists('include', $input) ? $input['include'] : '';
+
         return $this->payload
             ->withStatus(PayloadInterface::OK)
-            ->withOutput($this->fractal->createData($shiftsCollection)->toArray());
+            ->withOutput($this->fractal->parseIncludes($include)->createData($shiftsCollection)->toArray());
     }
 
 }
