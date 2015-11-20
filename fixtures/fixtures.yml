@@ -1,0 +1,29 @@
+Scheduler\Users\Entity\User:
+    manager{1..10}:
+        name: <firstName()> <lastName()>
+        role: manager
+        email: <email()>
+        phone: <phoneNumber()>
+        token: <md5()>
+        created_at: <dateTime()>
+        updated_at: <dateTime()>
+
+    employee{1..10}:
+        name: <firstName()> <lastName()>
+        role: employee
+        email: <email()>
+        phone: <phoneNumber()>
+        token: <md5()>
+        created_at: <dateTime()>
+        updated_at: <dateTime()>
+
+
+Scheduler\Shifts\Entity\Shift:
+    shift{1..100}:
+        manager: @manager*
+        employee: 75%? @employee*
+        break: <randomFloat(2, 0, 12)>
+        start_time: <dateTimeBetween('now', '+5 years')>
+        end_time: <dateTimeBetween($start_time, $start_time->format('r +2 \h\o\u\r\s'))>
+        created_at: <dateTime()>
+        updated_at: <dateTime()>
