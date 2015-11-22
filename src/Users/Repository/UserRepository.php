@@ -59,4 +59,33 @@ class UserRepository extends EntityRepository implements DoctrineRepository
 
         return $entity;
     }
+
+    /**
+     * Get all distinct employees working shifts between the given start and end time
+     *
+     * @param \DateTime $startDateTime
+     * @param \DateTime $endDateTime
+     * @param array $excludedEmployees
+     * @return \Scheduler\Users\Contracts\User[]
+     */
+    public function getEmployeesWorkingBetween(\DateTime $startDateTime, \DateTime $endDateTime, $excludedEmployees = [])
+    {
+        $qb = $this->createQueryBuilder('e');
+        $qb->select('distinct e')
+            ->join('e.employed_shifts', 's')
+            ->andWhere('s.start_time < :endDateTime')
+            ->andWhere('s.end_time > :startDateTime')
+            ->orderBy('s.start_time')
+            ->setParameters([
+                'startDateTime' => $startDateTime,
+                'endDateTime' => $endDateTime
+            ]);
+
+        if (! empty($excludedEmployees)) {
+            $qb->andWhere('e NOT IN (:excludedEmployees)')
+                ->setParameter('excludedEmployees', $excludedEmployees);
+        }
+
+        return $qb->getQuery()->getResult();
+    }
 }

@@ -21,6 +21,7 @@ $injector->prepare(
         $router->get('/users/{id}', 'Scheduler\Users\Domain\GetUsers');
         $router->get('/users/{id}/shifts', 'Scheduler\Users\Domain\GetUserShifts');
         $router->get('/users/{id}/hours', 'Scheduler\Users\Domain\GetUserHours');
+        $router->get('/users/{id}/coworkers', 'Scheduler\Users\Domain\GetUserShiftCoworkers');
         $router->post('/shifts/create', 'Scheduler\Shifts\Domain\StoreShift');
         $router->put('/shifts/{id}', 'Scheduler\Shifts\Domain\UpdateShift');
         $router->put('/shifts/{id}/assign/{employee_id}', 'Scheduler\Shifts\Domain\AssignShift');

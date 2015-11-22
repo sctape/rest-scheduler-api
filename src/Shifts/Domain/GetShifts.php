@@ -1,5 +1,6 @@
 <?php namespace Scheduler\Shifts\Domain;
 
+use Carbon\Carbon;
 use League\Fractal\Manager;
 use League\Fractal\Resource\Collection;
 use Scheduler\Shifts\Repository\ShiftRepository;
@@ -71,7 +72,7 @@ class GetShifts implements DomainInterface
         $inputValidator->assert($input);
 
         //Retrieve shifts between in time period
-        $shifts = $this->shiftRepository->getShiftsBetween($input['startDateTime'], $input['endDateTime']);
+        $shifts = $this->shiftRepository->getShiftsBetween(Carbon::parse($input['startDateTime']), Carbon::parse($input['endDateTime']));
         $shiftsCollection = new Collection($shifts, new ShiftTransformer);
 
         return $this->payload->withStatus(PayloadInterface::OK)

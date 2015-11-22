@@ -84,4 +84,19 @@ interface Shift
      * @param DateTime $updated_at
      */
     public function setUpdatedAt(DateTime $updated_at);
+
+    /**
+     * Get in-memory placeholder for shift coworkers
+     *
+     * @return array
+     */
+    public function getCoworkers();
+
+    /**
+     * Set in-memory placeholder for shift coworkers
+     *
+     * @param array $coworkers
+     * @return self
+     */
+    public function setCoworkers(array $coworkers);
 }

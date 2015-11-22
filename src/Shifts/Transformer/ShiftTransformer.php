@@ -18,7 +18,8 @@ class ShiftTransformer extends TransformerAbstract
      */
     protected $availableIncludes = [
         'employee',
-        'manager'
+        'manager',
+        'coworkers'
     ];
 
     /**
@@ -65,5 +66,18 @@ class ShiftTransformer extends TransformerAbstract
         $manager = $shift->getManager();
 
         return $this->item($manager, new UserTransformer);
+    }
+
+    /**
+     * Include shift coworkers
+     *
+     * @param Shift $shift
+     * @return \League\Fractal\Resource\Collection
+     */
+    public function includeCoworkers(Shift $shift)
+    {
+        $coworkers = $shift->getCoworkers();
+
+        return $this->collection($coworkers, new UserTransformer);
     }
 }

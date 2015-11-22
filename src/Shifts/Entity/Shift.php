@@ -28,13 +28,13 @@ class Shift implements ShiftInterface
 
     /**
      * @var User
-     * @ORM\ManyToOne(targetEntity="\Scheduler\Users\Entity\User")
+     * @ORM\ManyToOne(targetEntity="\Scheduler\Users\Entity\User", inversedBy="managed_shifts")
      */
     protected $manager;
 
     /**
      * @var User
-     * @ORM\ManyToOne(targetEntity="\Scheduler\Users\Entity\User")
+     * @ORM\ManyToOne(targetEntity="\Scheduler\Users\Entity\User", inversedBy="employed_shifts")
      */
     protected $employee;
 
@@ -55,6 +55,11 @@ class Shift implements ShiftInterface
      * @ORM\Column(type="datetime")
      */
     protected $end_time;
+
+    /**
+     * @var array in-memory storage for coworker information
+     */
+    private $coworkers;
 
     /**
      * @return int
@@ -150,5 +155,27 @@ class Shift implements ShiftInterface
         }
 
         $this->end_time = $end_time;
+    }
+
+    /**
+     * Get in-memory placeholder for shift coworkers
+     *
+     * @return array
+     */
+    public function getCoworkers()
+    {
+        return $this->coworkers;
+    }
+
+    /**
+     * Set in-memory placeholder for shift coworkers
+     *
+     * @param array $coworkers
+     * @return $this
+     */
+    public function setCoworkers(array $coworkers)
+    {
+        $this->coworkers = $coworkers;
+        return $this;
     }
 }

@@ -4,6 +4,7 @@ use Doctrine\ORM\EntityNotFoundException;
 use Doctrine\ORM\EntityRepository;
 use Scheduler\Repository\Contracts\DoctrineRepository;
 use Scheduler\Shifts\Contracts\Shift;
+use Scheduler\Shifts\Entity\Shift as ShiftEntity;
 use Scheduler\Users\Contracts\User;
 
 /**
@@ -64,11 +65,11 @@ class ShiftRepository extends EntityRepository implements DoctrineRepository
     /**
      * Get all shifts that occur between the given start and end times
      *
-     * @param string $startDateTime
-     * @param string $endDateTime
-     * @return Shift[]
+     * @param \DateTime $startDateTime
+     * @param \DateTime $endDateTime
+     * @return \Scheduler\Shifts\Contracts\Shift[]
      */
-    public function getShiftsBetween($startDateTime, $endDateTime)
+    public function getShiftsBetween(\DateTime $startDateTime, \DateTime $endDateTime)
     {
         $qb = $this->createQueryBuilder('s')
             ->addSelect('m, e')
@@ -78,14 +79,16 @@ class ShiftRepository extends EntityRepository implements DoctrineRepository
             ->andWhere('s.end_time > :startDateTime')
             ->orderBy('s.start_time')
             ->setParameters([
-                'startDateTime' => date_create($startDateTime),
-                'endDateTime' => date_create($endDateTime)
+                'startDateTime' => $startDateTime,
+                'endDateTime' => $endDateTime
             ]);
 
         return $qb->getQuery()->getResult();
     }
 
     /**
+     * Get a summary of hours worked by the given employee grouped by week
+     *
      * @param User $employee
      * @return array
      */
@@ -99,4 +102,6 @@ class ShiftRepository extends EntityRepository implements DoctrineRepository
   (SELECT STR_TO_DATE(CONCAT(year_week, ' Saturday'), '%X%V %W')) as week_end,
   sum(TO_SECONDS(end_time)-TO_SECONDS(start_time))/3600 as hours_count FROM shifts WHERE employee_id = :employee_id GROUP BY year_week;", ['employee_id' => $employee->getId()])->fetchAll();
     }
+
+
 }

@@ -1,6 +1,8 @@
 <?php namespace Scheduler\Users\Entity;
 
 use BeatSwitch\Lock\Callers\Caller;
+use Doctrine\Common\Collections\ArrayCollection;
+use Scheduler\Shifts\Contracts\Shift;
 use Scheduler\Support\Traits\Timestamps;
 use Scheduler\Users\Contracts\User as UserInterface;
 use Doctrine\ORM\Mapping as ORM;
@@ -55,6 +57,27 @@ class User implements UserInterface, Caller
      * @ORM\Column(type="string")
      */
     protected $token;
+
+    /**
+     * @var ArrayCollection|Shift[]
+     * @ORM\OneToMany(targetEntity="Scheduler\Shifts\Entity\Shift", mappedBy="manager")
+     */
+    protected $managed_shifts;
+
+    /**
+     * @var ArrayCollection|Shift[]
+     * @ORM\OneToMany(targetEntity="Scheduler\Shifts\Entity\Shift", mappedBy="employee")
+     */
+    protected $employed_shifts;
+
+    /**
+     * Initialize collections
+     */
+    public function __construct()
+    {
+        $this->managed_shifts = new ArrayCollection;
+        $this->employed_shifts = new ArrayCollection;
+    }
 
     /**
      * @return int
