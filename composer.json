@@ -1,7 +1,6 @@
 {
-    "name": "sparkphp/project",
-    "description": "A sample project for building an application using Spark.",
-    "type": "project",
+    "name": "sctape/rest-scheduler-api",
+    "description": "A sample REST API application using Spark.",
     "license": "MIT",
     "require": {
         "sparkphp/spark": "0.7",
@@ -26,8 +25,9 @@
     },
     "authors": [
         {
-            "name": "Daniel Olfelt",
-            "email": "dolfelt@gmail.com"
+            "name": "Samuel Tape",
+            "email": "sctape@gmail.com"
         }
-    ]
+    ],
+    "minimum-stability": "dev"
 }
