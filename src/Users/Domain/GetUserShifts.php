@@ -32,19 +32,31 @@ class GetUserShifts implements DomainInterface
      * @var Manager
      */
     private $fractal;
+    /**
+     * @var ShiftTransformer
+     */
+    private $shiftTransformer;
+    /**
+     * @var Collection
+     */
+    private $collection;
 
     /**
      * @param PayloadInterface $payload
      * @param UserRepository $userRepository
      * @param ShiftRepository $shiftRepository
      * @param Manager $fractal
+     * @param ShiftTransformer $shiftTransformer
+     * @param Collection $collection
      */
-    public function __construct(PayloadInterface $payload, UserRepository $userRepository, ShiftRepository $shiftRepository, Manager $fractal)
+    public function __construct(PayloadInterface $payload, UserRepository $userRepository, ShiftRepository $shiftRepository, Manager $fractal, ShiftTransformer $shiftTransformer, Collection $collection)
     {
         $this->payload = $payload;
         $this->shiftRepository = $shiftRepository;
         $this->userRepository = $userRepository;
         $this->fractal = $fractal;
+        $this->shiftTransformer = $shiftTransformer;
+        $this->collection = $collection;
     }
 
     /**
@@ -67,13 +79,13 @@ class GetUserShifts implements DomainInterface
         //Get shifts and transform
         $employee = $this->userRepository->getOneByIdOrFail($input['id']);
         $shifts = $this->shiftRepository->getByEmployee($employee);
-        $shiftsCollection = new Collection($shifts, new ShiftTransformer);
+        $this->collection->setData($shifts)->setTransformer($this->shiftTransformer);
 
         $include = array_key_exists('include', $input) ? $input['include'] : '';
 
         return $this->payload
             ->withStatus(PayloadInterface::OK)
-            ->withOutput($this->fractal->parseIncludes($include)->createData($shiftsCollection)->toArray());
+            ->withOutput($this->fractal->parseIncludes($include)->createData($this->collection)->toArray());
     }
 
 }

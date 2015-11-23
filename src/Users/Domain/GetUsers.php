@@ -44,6 +44,10 @@ class GetUsers implements DomainInterface
      * @var \BeatSwitch\Lock\Manager
      */
     private $lockManager;
+    /**
+     * @var Item
+     */
+    private $item;
 
     /**
      * @param PayloadInterface $payload
@@ -51,15 +55,17 @@ class GetUsers implements DomainInterface
      * @param UserTransformer $userTransformer
      * @param Manager $fractal
      * @param \BeatSwitch\Lock\Manager $lockManager
+     * @param Item $item
      * @internal param ServerRequestInterface $request
      */
-    public function __construct(PayloadInterface $payload, UserRepository $userRepository, UserTransformer $userTransformer, Manager $fractal, \BeatSwitch\Lock\Manager $lockManager)
+    public function __construct(PayloadInterface $payload, UserRepository $userRepository, UserTransformer $userTransformer, Manager $fractal, \BeatSwitch\Lock\Manager $lockManager, Item $item)
     {
         $this->payload = $payload;
         $this->userRepository = $userRepository;
         $this->userTransformer = $userTransformer;
         $this->fractal = $fractal;
         $this->lockManager = $lockManager;
+        $this->item = $item;
     }
 
     /**
@@ -79,10 +85,10 @@ class GetUsers implements DomainInterface
 
         //Get user from repository and transform into resource
         $user = $this->userRepository->getOneByIdOrFail($input['id']);
-        $resource = new Item($user, $this->userTransformer);
+        $this->item->setData($user)->setTransformer($this->userTransformer);
 
         return $this->payload
             ->withStatus(PayloadInterface::OK)
-            ->withOutput($this->fractal->createData($resource)->toArray());
+            ->withOutput($this->fractal->createData($this->item)->toArray());
     }
 }
