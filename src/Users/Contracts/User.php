@@ -8,6 +8,9 @@ use DateTime;
  */
 interface User
 {
+    const MANAGER_ROLE = 'manager';
+    const EMPLOYEE_ROLE = 'employee';
+
     /**
      * @return int
      */

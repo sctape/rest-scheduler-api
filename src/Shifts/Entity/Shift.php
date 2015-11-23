@@ -160,7 +160,7 @@ class Shift implements ShiftInterface
     /**
      * Get in-memory placeholder for shift coworkers
      *
-     * @return array
+     * @return User[]
      */
     public function getCoworkers()
     {
