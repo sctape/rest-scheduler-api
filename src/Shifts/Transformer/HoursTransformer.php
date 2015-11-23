@@ -18,12 +18,6 @@ class HoursTransformer extends TransformerAbstract
         return [
             'week'      => date_create($hours['week_start'])->format('r') . " - " . date_create($hours['week_end'])->format('r'),
             'hours'      => round($hours['hours_count'], 2),
-//            'links'   => [
-//                [
-//                    'rel' => 'self',
-//                    'uri' => '/shifts/'.$shift->getId(),
-//                ]
-//            ],
         ];
     }
 }
