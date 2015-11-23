@@ -14,14 +14,14 @@ use Spark\Auth\AuthHandler;
 use Spark\Auth\Token;
 
 /**
- * Class GetUserShiftsTest
+ * Class GetUsersTest
  * @package Scheduler\Codeception\Unit\Users\Domain
  * @author Sam Tape <sctape@gmail.com>
  */
-class GetUserShiftsTest extends Test
+class GetUsersTest extends Test
 {
     /**
-     * Test that the GetUserShifts domain can take in input with an ID and auth user, and return an array
+     * Test that the GetUsersTest domain can take in input with an ID and auth user, and return an array
      */
     public function testInvoke()
     {

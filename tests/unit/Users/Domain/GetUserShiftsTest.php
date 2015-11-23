@@ -16,19 +16,17 @@ use Spark\Auth\AuthHandler;
 use Spark\Auth\Token;
 
 /**
- * Class GetUsersTest
+ * Class GetUserShiftsTest
  * @package Scheduler\Codeception\Unit\Users\Domain
  * @author Sam Tape <sctape@gmail.com>
  */
-class GetUsersTest extends Test
+class GetUserShiftsTest extends Test
 {
     /**
-     * Test that the GetUsers domain can take in input with an ID and auth user, and return an array
+     * Test that the GetUserShifts domain can take in input with an ID and auth user, and return an array
      */
     public function testInvoke()
     {
-
-
         $shift = mockery::mock(Shift::class);
         $shifts = [$shift];
 
