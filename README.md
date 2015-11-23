@@ -16,7 +16,7 @@ After creating the project, copy the .env.example file to make a .env file and f
 cp .env.example .env
 ```
 
-The create the database schema by running the following doctrine command
+Create the database schema by running the following doctrine command
 
 ```bash
 vendor/bin/doctrine orm:schema-tool:create
