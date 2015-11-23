@@ -39,6 +39,14 @@ class GetShifts implements DomainInterface
      * @var \BeatSwitch\Lock\Manager
      */
     private $lockManager;
+    /**
+     * @var ShiftTransformer
+     */
+    private $shiftTransformer;
+    /**
+     * @var Collection
+     */
+    private $collection;
 
     /**
      * GetShifts constructor.
@@ -46,13 +54,17 @@ class GetShifts implements DomainInterface
      * @param ShiftRepository $shiftRepository
      * @param Manager $fractal
      * @param \BeatSwitch\Lock\Manager $lockManager
+     * @param ShiftTransformer $shiftTransformer
+     * @param Collection $collection
      */
-    public function __construct(PayloadInterface $payload, ShiftRepository $shiftRepository, Manager $fractal, \BeatSwitch\Lock\Manager $lockManager)
+    public function __construct(PayloadInterface $payload, ShiftRepository $shiftRepository, Manager $fractal, \BeatSwitch\Lock\Manager $lockManager, ShiftTransformer $shiftTransformer, Collection $collection)
     {
         $this->payload = $payload;
         $this->shiftRepository = $shiftRepository;
         $this->fractal = $fractal;
         $this->lockManager = $lockManager;
+        $this->shiftTransformer = $shiftTransformer;
+        $this->collection = $collection;
     }
 
     /**
@@ -73,9 +85,9 @@ class GetShifts implements DomainInterface
 
         //Retrieve shifts between in time period
         $shifts = $this->shiftRepository->getShiftsBetween(Carbon::parse($input['startDateTime']), Carbon::parse($input['endDateTime']));
-        $shiftsCollection = new Collection($shifts, new ShiftTransformer);
+        $this->collection->setData($shifts)->setTransformer($this->shiftTransformer);
 
         return $this->payload->withStatus(PayloadInterface::OK)
-            ->withOutput($this->fractal->parseIncludes(['manager', 'employee'])->createData($shiftsCollection)->toArray());
+            ->withOutput($this->fractal->parseIncludes(['manager', 'employee'])->createData($this->collection)->toArray());
     }
 }
