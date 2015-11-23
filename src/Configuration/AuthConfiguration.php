@@ -4,7 +4,7 @@ use Auryn\Injector;
 use Scheduler\Auth\Adapter;
 use Spark\Auth\AdapterInterface;
 use Spark\Auth\Credentials\JsonExtractor;
-use Spark\Auth\Token\QueryExtractor;
+use Spark\Auth\Token\HeaderExtractor;
 use Spark\Configuration\ConfigurationInterface;
 
 /**
@@ -23,14 +23,14 @@ class AuthConfiguration implements ConfigurationInterface
     {
         //Specify token parameter from query string
         $injector->define(
-            QueryExtractor::class,
-            [':parameter' => 'al']
+            HeaderExtractor::class,
+            [':header' => 'Authorization']
         );
 
         //Use Query Extractor to grab auth token
         $injector->alias(
             \Spark\Auth\Token\ExtractorInterface::class,
-            QueryExtractor::class
+            HeaderExtractor::class
         );
 
         //Use Json Extractor to grab credentials
