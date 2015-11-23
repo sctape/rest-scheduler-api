@@ -4,10 +4,10 @@
 
 You will need [Composer](https://getcomposer.org) to install this API library.
 
-use Composer to install the library:
+use Composer to get things going
 
 ```bash
-composer create-project -s dev sctape/rest-scheduler-api rest-scheduler-api
+composer install
 ```
 
 After creating the project, copy the .env.example file to make a .env file and fill in the appropriate configuration fields
