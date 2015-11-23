@@ -33,18 +33,32 @@ class GetUserHours implements DomainInterface
     private $fractal;
 
     /**
+     * @var HoursTransformer
+     */
+    private $hoursTransformer;
+
+    /**
+     * @var Collection
+     */
+    private $collection;
+
+    /**
      * GetUserHours constructor.
      * @param PayloadInterface $payload
      * @param ShiftRepository $shiftRepository
      * @param UserRepository $userRepository
      * @param Manager $fractal
+     * @param HoursTransformer $hoursTransformer
+     * @param Collection $collection
      */
-    public function __construct(PayloadInterface $payload, ShiftRepository $shiftRepository, UserRepository $userRepository, Manager $fractal)
+    public function __construct(PayloadInterface $payload, ShiftRepository $shiftRepository, UserRepository $userRepository, Manager $fractal, HoursTransformer $hoursTransformer, Collection $collection)
     {
         $this->payload = $payload;
         $this->shiftRepository = $shiftRepository;
         $this->userRepository = $userRepository;
         $this->fractal = $fractal;
+        $this->hoursTransformer = $hoursTransformer;
+        $this->collection = $collection;
     }
 
     /**
@@ -65,10 +79,10 @@ class GetUserHours implements DomainInterface
         //Get hours and transform to more readable collection
         $employee = $this->userRepository->getOneByIdOrFail($input['id']);
         $hours = $this->shiftRepository->getHoursCountGroupedByWeekFor($employee);
-        $hoursCollection = new Collection($hours, new HoursTransformer);
+        $this->collection->setData($hours)->setTransformer($this->hoursTransformer);
 
         return $this->payload
             ->withStatus(PayloadInterface::OK)
-            ->withOutput($this->fractal->createData($hoursCollection)->toArray());
+            ->withOutput($this->fractal->createData($this->collection)->toArray());
     }
 }

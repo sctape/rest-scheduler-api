@@ -10,6 +10,11 @@ use Spark\Adr\DomainInterface;
 use Spark\Adr\PayloadInterface;
 use Spark\Auth\AuthHandler;
 
+/**
+ * Class GetUserShiftCoworkers
+ * @package Scheduler\Users\Domain
+ * @author Sam Tape <sctape@gmail.com>
+ */
 class GetUserShiftCoworkers implements DomainInterface
 {
     /**
@@ -33,9 +38,14 @@ class GetUserShiftCoworkers implements DomainInterface
     private $fractal;
 
     /**
-     * @var \BeatSwitch\Lock\Manager
+     * @var ShiftTransformer
      */
-    private $lockManager;
+    private $shiftTransformer;
+
+    /**
+     * @var Collection
+     */
+    private $collection;
 
     /**
      * GetUserShiftCoworkers constructor.
@@ -43,17 +53,18 @@ class GetUserShiftCoworkers implements DomainInterface
      * @param ShiftRepository $shiftRepository
      * @param UserRepository $userRepository
      * @param Manager $fractal
-     * @param \BeatSwitch\Lock\Manager $lockManager
+     * @param ShiftTransformer $shiftTransformer
+     * @param Collection $collection
      */
-    public function __construct(PayloadInterface $payload, ShiftRepository $shiftRepository, UserRepository $userRepository, Manager $fractal, \BeatSwitch\Lock\Manager $lockManager)
+    public function __construct(PayloadInterface $payload, ShiftRepository $shiftRepository, UserRepository $userRepository, Manager $fractal, ShiftTransformer $shiftTransformer, Collection $collection)
     {
         $this->payload = $payload;
         $this->shiftRepository = $shiftRepository;
         $this->userRepository = $userRepository;
         $this->fractal = $fractal;
-        $this->lockManager = $lockManager;
+        $this->shiftTransformer = $shiftTransformer;
+        $this->collection = $collection;
     }
-
 
     /**
      * Handle domain logic for an action.
@@ -73,14 +84,14 @@ class GetUserShiftCoworkers implements DomainInterface
         $employee = $this->userRepository->getOneByIdOrFail($input['id']);
         $shifts = $this->shiftRepository->getByEmployee($employee);
 
+        //Loop over shifts getting employees that work at the same time for each shift
         foreach($shifts as $shift) {
             $coworkers = $this->userRepository->getEmployeesWorkingBetween($shift->getStartTime(), $shift->getEndTime(), [$employee]);
             $shift->setCoworkers($coworkers);
         }
-
-        $shiftCollection = new Collection($shifts, new ShiftTransformer);
+        $this->collection->setData($shifts)->setTransformer($this->shiftTransformer);
 
         return $this->payload->withStatus(PayloadInterface::OK)
-            ->withOutput($this->fractal->parseIncludes('coworkers')->createData($shiftCollection)->toArray());
+            ->withOutput($this->fractal->parseIncludes('coworkers')->createData($this->collection)->toArray());
     }
 }

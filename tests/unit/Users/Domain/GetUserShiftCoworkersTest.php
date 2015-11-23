@@ -9,6 +9,7 @@ use Scheduler\Shifts\Contracts\Shift;
 use Scheduler\Shifts\Repository\ShiftRepository;
 use Scheduler\Shifts\Transformer\ShiftTransformer;
 use Scheduler\Users\Contracts\User;
+use Scheduler\Users\Domain\GetUserShiftCoworkers;
 use Scheduler\Users\Domain\GetUserShifts;
 use Scheduler\Users\Repository\UserRepository;
 use Spark\Adr\PayloadInterface;
@@ -16,21 +17,29 @@ use Spark\Auth\AuthHandler;
 use Spark\Auth\Token;
 
 /**
- * Class GetUserShiftsTest
+ * Class GetUserShiftCoworkersTest
  * @package Scheduler\Codeception\Unit\Users\Domain
  * @author Sam Tape <sctape@gmail.com>
  */
-class GetUserShiftsTest extends Test
+class GetUserShiftCoworkersTest extends Test
 {
     /**
-     * Test that the GetUserShifts domain can take in input with an ID and auth user, and return an array
+     * Test that the GetUserCoworkers domain can take in input with an ID and auth user, and return an array
      */
     public function testInvoke()
     {
-        $shift = mockery::mock(Shift::class);
-        $shifts = [$shift];
-
         $employee = mockery::mock(User::class);
+        $employee2 = mockery::mock(User::class);
+        $coworkers = [$employee2];
+
+        $startTime = new \DateTime();
+        $endTime = new \DateTime("+2 hours");
+
+        $shift = mockery::mock(Shift::class);
+        $shift->shouldReceive('setCoworkers')->once()->with($coworkers)->andReturnNull();
+        $shift->shouldReceive('getStartTime')->once()->withNoArgs()->andReturn($startTime);
+        $shift->shouldReceive('getEndTime')->once()->withNoArgs()->andReturn($endTime);
+        $shifts = [$shift];
 
         $shiftTransformer = mockery::mock(ShiftTransformer::class);
 
@@ -50,15 +59,16 @@ class GetUserShiftsTest extends Test
 
         $userRepository = mockery::mock(UserRepository::class);
         $userRepository->shouldReceive('getOneByIdOrFail')->once()->with(1)->andReturn($employee);
+        $userRepository->shouldReceive('getEmployeesWorkingBetween')->once()->with($startTime, $endTime, [$employee])->andReturn($coworkers);
 
         $fractal = mockery::mock(Manager::class);
-        $fractal->shouldReceive('parseIncludes')->once()->with('employee,manager')->andReturnSelf();
         $fractal->shouldReceive('createData')->once()->with($collection)->andReturn($scope);
+        $fractal->shouldReceive('parseIncludes')->once()->with('coworkers')->andReturnSelf();
 
         $token = mockery::mock(Token::class);
         $token->shouldReceive('getMetadata')->once()->with('id')->andReturn(1);
 
-        $domain = new GetUserShifts($payloadInterface, $userRepository, $shiftRepository, $fractal, $shiftTransformer, $collection);
+        $domain = new GetUserShiftCoworkers($payloadInterface, $shiftRepository, $userRepository, $fractal, $shiftTransformer, $collection);
 
         $input = [
             'id' => 1,
@@ -77,10 +87,18 @@ class GetUserShiftsTest extends Test
      */
     public function testInvokeWithUnauthorizedUser()
     {
-        $shift = mockery::mock(Shift::class);
-        $shifts = [$shift];
-
         $employee = mockery::mock(User::class);
+        $employee2 = mockery::mock(User::class);
+        $coworkers = [$employee2];
+
+        $startTime = new \DateTime();
+        $endTime = new \DateTime("+2 hours");
+
+        $shift = mockery::mock(Shift::class);
+        $shift->shouldReceive('setCoworkers')->once()->with($coworkers)->andReturnNull();
+        $shift->shouldReceive('getStartTime')->once()->withNoArgs()->andReturn($startTime);
+        $shift->shouldReceive('getEndTime')->once()->withNoArgs()->andReturn($endTime);
+        $shifts = [$shift];
 
         $shiftTransformer = mockery::mock(ShiftTransformer::class);
 
@@ -100,15 +118,16 @@ class GetUserShiftsTest extends Test
 
         $userRepository = mockery::mock(UserRepository::class);
         $userRepository->shouldReceive('getOneByIdOrFail')->once()->with(1)->andReturn($employee);
+        $userRepository->shouldReceive('getEmployeesWorkingBetween')->once()->with($startTime, $endTime, [$employee])->andReturn($coworkers);
 
         $fractal = mockery::mock(Manager::class);
-        $fractal->shouldReceive('parseIncludes')->once()->with('employee,manager')->andReturnSelf();
         $fractal->shouldReceive('createData')->once()->with($collection)->andReturn($scope);
+        $fractal->shouldReceive('parseIncludes')->once()->with('coworkers')->andReturnSelf();
 
         $token = mockery::mock(Token::class);
         $token->shouldReceive('getMetadata')->once()->with('id')->andReturn(1);
 
-        $domain = new GetUserShifts($payloadInterface, $userRepository, $shiftRepository, $fractal, $shiftTransformer, $collection);
+        $domain = new GetUserShiftCoworkers($payloadInterface, $shiftRepository, $userRepository, $fractal, $shiftTransformer, $collection);
 
         $input = [
             'id' => 2,

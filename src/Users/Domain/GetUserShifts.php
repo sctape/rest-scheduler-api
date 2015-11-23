@@ -32,10 +32,12 @@ class GetUserShifts implements DomainInterface
      * @var Manager
      */
     private $fractal;
+
     /**
      * @var ShiftTransformer
      */
     private $shiftTransformer;
+
     /**
      * @var Collection
      */
