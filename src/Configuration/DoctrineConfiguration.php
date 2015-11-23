@@ -29,10 +29,11 @@ class DoctrineConfiguration implements ConfigurationInterface
 
         // the connection configuration
         $dbParams = array(
-            'driver'   => 'pdo_mysql',
-            'user'     => 'homestead',
-            'password' => 'secret',
-            'dbname'   => 'scheduler',
+            'host'     => $_ENV['DB_HOST'],
+            'driver'   => $_ENV['DB_DRIVER'],
+            'user'     => $_ENV['DB_USER'],
+            'password' => $_ENV['DB_PASSWORD'],
+            'dbname'   => $_ENV['DB_DATABASE_NAME'],
         );
 
         $config = Setup::createAnnotationMetadataConfiguration($paths, $isDevMode, null, null, false);

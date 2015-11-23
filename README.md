@@ -1,39 +1,37 @@
-# Spark
+# REST Scheduler API
 
-Spark is a PSR-7 compliant [Action-Domain-Responder](https://github.com/pmjones/adr)
-(ADR) system. While it may look like a micro-framework (and it is), it is more like a
-wrapper around the real logic of your application domain. It's also [PSR-1](http://www.php-fig.org/psr/psr-1/),
-[PSR-2](http://www.php-fig.org/psr/psr-2/), and [PSR-4](http://www.php-fig.org/psr/psr-4/) compliant.
+## Installing the library
 
-Check out the source project [here](http://github.com/sparkphp/Spark).
+You will need [Composer](https://getcomposer.org) to install this API library.
 
-## Installing Spark
-
-You will need [Composer](https://getcomposer.org) to install Spark.
-
-Pick a project name, and use Composer to create it with Spark. Let's create
-one called `spark-project`:
+use Composer to install the library:
 
 ```bash
-composer create-project -s dev sparkphp/project spark-project
+composer create-project -s dev sctape/rest-scheduler-api rest-scheduler-api
 ```
 
-Confirm the installation by changing into the project directory and starting the
-built-in PHP web server:
+After creating the project, copy the .env.example file to make a .env file and fill in the appropriate configuration fields
 
 ```bash
-cd spark-project
-php -S localhost:8000 -t web/
+cp .env.example .env
 ```
 
-You can then browse to <http://localhost:8000/hello> and see JSON output:
+The create the database schema by running the following doctrine command
 
-```json
-{"hello": "world"}
+```bash
+vendor/bin/doctrine orm:schema-tool:create
 ```
 
-You can also browse to <http://localhost:8000/hello/nancy> and see modified JSON output:
+After the schema has been created in the database, you can seed it with some fake data using the provided seeder
 
-```json
-{"hello":"nancy"}
+```bash
+php fixtures/seed_data.php
+```
+
+## Running tests
+
+After getting your project set up, you can run the Codeception tests as follows
+
+```bash
+vendor/bin/codecept run
 ```

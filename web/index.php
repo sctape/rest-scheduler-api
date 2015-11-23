@@ -3,6 +3,10 @@
 // Include Composer autoloader
 require __DIR__ . '/../vendor/autoload.php';
 
+//Loading .env variables
+$dotenv = new Dotenv\Dotenv(__DIR__ . '/../');
+$dotenv->load();
+
 // Configure the dependency injection container
 $injector = new \Auryn\Injector;
 $configuration = new \Scheduler\Configuration\ConfigurationSet;
@@ -36,3 +40,4 @@ $dispatcher(
     $injector->make('Psr\\Http\\Message\\ServerRequestInterface'),
     $injector->make('Psr\\Http\\Message\\ResponseInterface')
 );
+

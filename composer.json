@@ -15,7 +15,8 @@
         "beatswitch/lock": "^0.2.0",
         "respect/validation": "^1.0",
         "nelmio/alice": "^2.1",
-        "nesbot/carbon": "^1.21"
+        "nesbot/carbon": "^1.21",
+        "vlucas/phpdotenv": "^2.1"
     },
     "autoload": {
         "psr-4": {
